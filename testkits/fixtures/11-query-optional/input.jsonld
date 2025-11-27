@@ -1,0 +1,15 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id": "ex:order2",
+  "lines": [
+    {"sku":"A","qty":2,"price":5},
+    {"sku":"B","qty":1,"price":12,"discount":2}
+  ],
+  "totalOpt": {"@query": {
+    "patterns": [
+      {"s":"?line","p":"ex:qty","o":"?q"},
+      {"s":"?line","p":"ex:price","o":"?p"}
+    ],
+    "select": [ {"total": {"agg":"sum", "expr":"?q * ?p"}} ]
+  }}
+}

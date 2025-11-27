@@ -1,0 +1,11 @@
+{
+  "@context": { "ex": "https://ex/" },
+  "@id": "ex:test1",
+
+  "a": 10,
+  "b": 5,
+
+  "sum": { "@expr": "a + b" },
+  "product": { "@expr": "a * b" },
+  "ratio": { "@expr": "a / b" }
+}

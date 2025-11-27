@@ -1,0 +1,186 @@
+{
+	"@context": {
+		"name": "https://schema.org/name",
+		"description": "https://schema.org/description",
+		"startDate": "https://schema.org/startDate",
+		"endDate": "https://schema.org/endDate",
+		"location": "https://schema.org/location",
+		"organizer": {
+			"@id": "https://schema.org/organizer",
+			"@type": "@id"
+		},
+		"attendees": {
+			"@id": "https://schema.org/attendee",
+			"@type": "@id"
+		},
+		"status": "https://schema.org/eventStatus",
+		"category": "https://example.com/vocab/eventCategory",
+		"capacity": "https://schema.org/maximumAttendeeCapacity",
+		"registered": "https://example.com/vocab/registeredCount"
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Events",
+			"description": "Event management with dates, locations, and attendees."
+		},
+		"properties": [
+			{
+				"id": "prop:name",
+				"key": "name",
+				"title": "Event Name",
+				"type": "title"
+			},
+			{
+				"id": "prop:description",
+				"key": "description",
+				"title": "Description",
+				"type": "rich_text"
+			},
+			{
+				"id": "prop:category",
+				"key": "category",
+				"title": "Category",
+				"type": "select",
+				"options": [
+					{ "id": "opt:conference", "name": "Conference" },
+					{ "id": "opt:workshop", "name": "Workshop" },
+					{ "id": "opt:meetup", "name": "Meetup" },
+					{ "id": "opt:webinar", "name": "Webinar" },
+					{ "id": "opt:social", "name": "Social" }
+				]
+			},
+			{
+				"id": "prop:status",
+				"key": "status",
+				"title": "Status",
+				"type": "select",
+				"options": [
+					{ "id": "opt:scheduled", "name": "Scheduled" },
+					{ "id": "opt:cancelled", "name": "Cancelled" },
+					{ "id": "opt:postponed", "name": "Postponed" },
+					{ "id": "opt:completed", "name": "Completed" }
+				]
+			},
+			{
+				"id": "prop:start-date",
+				"key": "startDate",
+				"title": "Start Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:end-date",
+				"key": "endDate",
+				"title": "End Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:location",
+				"key": "location",
+				"title": "Location",
+				"type": "text"
+			},
+			{
+				"id": "prop:organizer",
+				"key": "organizer",
+				"title": "Organizer",
+				"type": "relation"
+			},
+			{
+				"id": "prop:capacity",
+				"key": "capacity",
+				"title": "Capacity",
+				"type": "number"
+			},
+			{
+				"id": "prop:registered",
+				"key": "registered",
+				"title": "Registered",
+				"type": "number"
+			},
+			{
+				"id": "prop:availability",
+				"key": "availability",
+				"title": "Spots Available",
+				"type": "formula"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "event:tech-summit-2025",
+			"@type": "Event",
+			"name": "Tech Summit 2025",
+			"description": "Annual technology conference featuring industry leaders",
+			"category": "Conference",
+			"status": "Scheduled",
+			"startDate": { "start": "2025-11-15" },
+			"endDate": { "start": "2025-11-17" },
+			"location": "San Francisco Convention Center",
+			"organizer": "person:alice",
+			"capacity": 500,
+			"registered": 387,
+			"availability": { "@expr": "capacity - registered" }
+		},
+		{
+			"@id": "event:react-workshop",
+			"@type": "Event",
+			"name": "React Advanced Workshop",
+			"description": "Hands-on workshop covering React 19 and Server Components",
+			"category": "Workshop",
+			"status": "Scheduled",
+			"startDate": { "start": "2025-10-20" },
+			"endDate": { "start": "2025-10-20" },
+			"location": "Online",
+			"organizer": "person:bob",
+			"capacity": 50,
+			"registered": 48,
+			"availability": { "@expr": "capacity - registered" }
+		},
+		{
+			"@id": "event:design-meetup",
+			"@type": "Event",
+			"name": "UX Design Meetup",
+			"description": "Monthly meetup for UX designers to share ideas and network",
+			"category": "Meetup",
+			"status": "Completed",
+			"startDate": { "start": "2025-09-10" },
+			"endDate": { "start": "2025-09-10" },
+			"location": "Design Studio, Austin",
+			"organizer": "person:emma",
+			"capacity": 30,
+			"registered": 28,
+			"availability": { "@expr": "capacity - registered" }
+		},
+		{
+			"@id": "event:ai-webinar",
+			"@type": "Event",
+			"name": "AI in Production Webinar",
+			"description": "Learn how to deploy and scale AI models in production",
+			"category": "Webinar",
+			"status": "Scheduled",
+			"startDate": { "start": "2025-10-25" },
+			"endDate": { "start": "2025-10-25" },
+			"location": "Online",
+			"organizer": "person:carol",
+			"capacity": 1000,
+			"registered": 742,
+			"availability": { "@expr": "capacity - registered" }
+		},
+		{
+			"@id": "event:team-offsite",
+			"@type": "Event",
+			"name": "Engineering Team Offsite",
+			"description": "Quarterly team building and planning session",
+			"category": "Social",
+			"status": "Scheduled",
+			"startDate": { "start": "2025-11-05" },
+			"endDate": { "start": "2025-11-07" },
+			"location": "Lake Tahoe Resort",
+			"organizer": "person:david",
+			"capacity": 25,
+			"registered": 25,
+			"availability": { "@expr": "capacity - registered" }
+		}
+	]
+}

@@ -1,0 +1,7 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id":"ex:r1",
+  "name": "Alice",
+  "isAdult": {"@rule": "?p a <ex:Person> . OPTIONAL {?p <ex:age> ?a} . FILTER(?a >= 18) -> ?p <ex:isAdult> true"}
+}
+

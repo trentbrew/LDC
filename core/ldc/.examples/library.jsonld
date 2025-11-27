@@ -1,0 +1,267 @@
+{
+	"@context": {
+		"title": "https://schema.org/name",
+		"author": "https://schema.org/author",
+		"isbn": "https://schema.org/isbn",
+		"publisher": "https://schema.org/publisher",
+		"publishDate": "https://schema.org/datePublished",
+		"pages": "https://schema.org/numberOfPages",
+		"genre": "https://schema.org/genre",
+		"language": "https://schema.org/inLanguage",
+		"rating": "https://schema.org/ratingValue",
+		"available": "https://schema.org/availability",
+		"copies": "https://example.com/vocab/totalCopies",
+		"checkedOut": "https://example.com/vocab/checkedOutCopies",
+		"description": "https://schema.org/description",
+		"tags": "https://schema.org/keywords"
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Library",
+			"description": "Library catalog with books, authors, and availability tracking."
+		},
+		"properties": [
+			{
+				"id": "prop:title",
+				"key": "title",
+				"title": "Title",
+				"type": "title"
+			},
+			{
+				"id": "prop:author",
+				"key": "author",
+				"title": "Author",
+				"type": "text"
+			},
+			{
+				"id": "prop:isbn",
+				"key": "isbn",
+				"title": "ISBN",
+				"type": "text"
+			},
+			{
+				"id": "prop:publisher",
+				"key": "publisher",
+				"title": "Publisher",
+				"type": "text"
+			},
+			{
+				"id": "prop:publish-date",
+				"key": "publishDate",
+				"title": "Published",
+				"type": "date"
+			},
+			{
+				"id": "prop:pages",
+				"key": "pages",
+				"title": "Pages",
+				"type": "number"
+			},
+			{
+				"id": "prop:genre",
+				"key": "genre",
+				"title": "Genre",
+				"type": "select",
+				"options": [
+					{ "id": "opt:fiction", "name": "Fiction" },
+					{ "id": "opt:nonfiction", "name": "Non-Fiction" },
+					{ "id": "opt:scifi", "name": "Science Fiction" },
+					{ "id": "opt:mystery", "name": "Mystery" },
+					{ "id": "opt:biography", "name": "Biography" },
+					{ "id": "opt:technical", "name": "Technical" }
+				]
+			},
+			{
+				"id": "prop:language",
+				"key": "language",
+				"title": "Language",
+				"type": "select",
+				"options": [
+					{ "id": "opt:english", "name": "English" },
+					{ "id": "opt:spanish", "name": "Spanish" },
+					{ "id": "opt:french", "name": "French" },
+					{ "id": "opt:german", "name": "German" },
+					{ "id": "opt:japanese", "name": "Japanese" }
+				]
+			},
+			{
+				"id": "prop:rating",
+				"key": "rating",
+				"title": "Rating",
+				"type": "number"
+			},
+			{
+				"id": "prop:available",
+				"key": "available",
+				"title": "Available",
+				"type": "checkbox"
+			},
+			{
+				"id": "prop:copies",
+				"key": "copies",
+				"title": "Total Copies",
+				"type": "number"
+			},
+			{
+				"id": "prop:checked-out",
+				"key": "checkedOut",
+				"title": "Checked Out",
+				"type": "number"
+			},
+			{
+				"id": "prop:available-copies",
+				"key": "availableCopies",
+				"title": "Available Copies",
+				"type": "formula"
+			},
+			{
+				"id": "prop:tags",
+				"key": "tags",
+				"title": "Tags",
+				"type": "multi_select"
+			},
+			{
+				"id": "prop:description",
+				"key": "description",
+				"title": "Description",
+				"type": "rich_text"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "book:1984",
+			"@type": "Book",
+			"title": "1984",
+			"author": "George Orwell",
+			"isbn": "978-0451524935",
+			"publisher": "Signet Classic",
+			"publishDate": { "start": "1949-06-08" },
+			"pages": 328,
+			"genre": "Fiction",
+			"language": "English",
+			"rating": 4.7,
+			"available": true,
+			"copies": 5,
+			"checkedOut": 2,
+			"availableCopies": { "@expr": "copies - checkedOut" },
+			"tags": ["dystopia", "classic", "political"],
+			"description": "A dystopian social science fiction novel and cautionary tale about totalitarianism."
+		},
+		{
+			"@id": "book:sapiens",
+			"@type": "Book",
+			"title": "Sapiens: A Brief History of Humankind",
+			"author": "Yuval Noah Harari",
+			"isbn": "978-0062316097",
+			"publisher": "Harper",
+			"publishDate": { "start": "2015-02-10" },
+			"pages": 443,
+			"genre": "Non-Fiction",
+			"language": "English",
+			"rating": 4.5,
+			"available": true,
+			"copies": 3,
+			"checkedOut": 1,
+			"availableCopies": { "@expr": "copies - checkedOut" },
+			"tags": ["history", "anthropology", "science"],
+			"description": "Explores the history of humanity from the Stone Age to the modern age."
+		},
+		{
+			"@id": "book:dune",
+			"@type": "Book",
+			"title": "Dune",
+			"author": "Frank Herbert",
+			"isbn": "978-0441172719",
+			"publisher": "Ace",
+			"publishDate": { "start": "1965-08-01" },
+			"pages": 688,
+			"genre": "Science Fiction",
+			"language": "English",
+			"rating": 4.8,
+			"available": false,
+			"copies": 4,
+			"checkedOut": 4,
+			"availableCopies": { "@expr": "copies - checkedOut" },
+			"tags": ["scifi", "epic", "classic", "space"],
+			"description": "Set in the distant future amidst a huge interstellar empire, it tells the story of young Paul Atreides."
+		},
+		{
+			"@id": "book:sherlock",
+			"@type": "Book",
+			"title": "The Complete Sherlock Holmes",
+			"author": "Arthur Conan Doyle",
+			"isbn": "978-0553328257",
+			"publisher": "Bantam Classics",
+			"publishDate": { "start": "1930-01-01" },
+			"pages": 1122,
+			"genre": "Mystery",
+			"language": "English",
+			"rating": 4.6,
+			"available": true,
+			"copies": 2,
+			"checkedOut": 0,
+			"availableCopies": { "@expr": "copies - checkedOut" },
+			"tags": ["mystery", "detective", "classic", "victorian"],
+			"description": "Complete collection of Sherlock Holmes stories and novels."
+		},
+		{
+			"@id": "book:steve-jobs",
+			"@type": "Book",
+			"title": "Steve Jobs",
+			"author": "Walter Isaacson",
+			"isbn": "978-1451648539",
+			"publisher": "Simon & Schuster",
+			"publishDate": { "start": "2011-10-24" },
+			"pages": 656,
+			"genre": "Biography",
+			"language": "English",
+			"rating": 4.4,
+			"available": true,
+			"copies": 3,
+			"checkedOut": 1,
+			"availableCopies": { "@expr": "copies - checkedOut" },
+			"tags": ["biography", "technology", "business", "innovation"],
+			"description": "The exclusive biography of Steve Jobs, based on interviews with Jobs himself."
+		},
+		{
+			"@id": "book:clean-code",
+			"@type": "Book",
+			"title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+			"author": "Robert C. Martin",
+			"isbn": "978-0132350884",
+			"publisher": "Prentice Hall",
+			"publishDate": { "start": "2008-08-01" },
+			"pages": 464,
+			"genre": "Technical",
+			"language": "English",
+			"rating": 4.7,
+			"available": true,
+			"copies": 6,
+			"checkedOut": 3,
+			"availableCopies": { "@expr": "copies - checkedOut" },
+			"tags": ["programming", "software", "best-practices", "reference"],
+			"description": "A handbook of agile software craftsmanship teaching how to write clean, maintainable code."
+		},
+		{
+			"@id": "book:neuromancer",
+			"@type": "Book",
+			"title": "Neuromancer",
+			"author": "William Gibson",
+			"isbn": "978-0441569595",
+			"publisher": "Ace",
+			"publishDate": { "start": "1984-07-01" },
+			"pages": 271,
+			"genre": "Science Fiction",
+			"language": "English",
+			"rating": 4.3,
+			"available": true,
+			"copies": 2,
+			"checkedOut": 1,
+			"availableCopies": { "@expr": "copies - checkedOut" },
+			"tags": ["cyberpunk", "scifi", "technology", "classic"],
+			"description": "The novel that launched the cyberpunk genre, set in a dystopian future."
+		}
+	]
+}

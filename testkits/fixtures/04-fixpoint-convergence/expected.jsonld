@@ -1,0 +1,6 @@
+{
+  "@id":"https://ex/graph1",
+  "https://ex/a": 1,
+  "https://ex/b": 1
+}
+

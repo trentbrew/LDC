@@ -1,0 +1,11 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id":"ex:d1",
+  "lines": [
+    {"qty": 2, "price": 5, "lineTotal": {"@expr": "qty * price"}},
+    {"qty": 1, "price": 6, "lineTotal": {"@expr": "qty * price"}}
+  ],
+  "total": {"@expr":"sum(lines.map(x => x.lineTotal))"},
+  "@deps": {"total": ["lines", "lines[*].lineTotal"]}
+}
+

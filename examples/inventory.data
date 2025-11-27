@@ -1,0 +1,40 @@
+{
+  "@context": {
+    "ex": "https://example.com/inventory/"
+  },
+  "@id": "ex:warehouse-a",
+  "@type": "Inventory",
+
+  "items": [
+    { "sku": "WIDGET-001", "name": "Blue Widget", "qty": 150, "minStock": 50, "price": 12.99 },
+    { "sku": "WIDGET-002", "name": "Red Widget", "qty": 30, "minStock": 50, "price": 14.99 },
+    { "sku": "GADGET-001", "name": "Super Gadget", "qty": 200, "minStock": 25, "price": 49.99 },
+    { "sku": "GADGET-002", "name": "Mini Gadget", "qty": 10, "minStock": 100, "price": 29.99 }
+  ],
+
+  "totalItems": {
+    "@expr": "items.map(i => i.qty).reduce((a, b) => a + b, 0)"
+  },
+
+  "totalValue": {
+    "@expr": "items.map(i => i.qty * i.price).reduce((a, b) => a + b, 0)"
+  },
+
+  "lowStockItems": {
+    "@expr": "items.filter(i => i.qty < i.minStock)"
+  },
+
+  "lowStockCount": {
+    "@expr": "lowStockItems.length"
+  },
+
+  "hasLowStock": {
+    "@constraint": "lowStockCount == 0"
+  },
+
+  "needsRestock": {
+    "@view": {
+      "@expr": "lowStockCount > 0"
+    }
+  }
+}

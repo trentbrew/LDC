@@ -1,0 +1,7 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id":"ex:schema1",
+  "x": -1,
+  "c1": {"@constraint":"x >= 0"}
+}
+

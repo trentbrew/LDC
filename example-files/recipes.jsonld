@@ -1,0 +1,218 @@
+{
+	"@context": {
+		"name": "https://schema.org/name",
+		"description": "https://schema.org/description",
+		"prepTime": "https://schema.org/prepTime",
+		"cookTime": "https://schema.org/cookTime",
+		"servings": "https://schema.org/recipeYield",
+		"difficulty": "https://example.com/vocab/difficulty",
+		"cuisine": "https://schema.org/recipeCuisine",
+		"category": "https://schema.org/recipeCategory",
+		"ingredients": "https://schema.org/recipeIngredient",
+		"instructions": "https://schema.org/recipeInstructions",
+		"calories": "https://schema.org/calories",
+		"rating": "https://schema.org/ratingValue"
+	},
+	"@units": {
+		"min": { "kind": "time" },
+		"kcal": { "kind": "energy" }
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Recipes",
+			"description": "Cooking recipes with ingredients, instructions, and nutritional info."
+		},
+		"properties": [
+			{
+				"id": "prop:name",
+				"key": "name",
+				"title": "Recipe Name",
+				"type": "title"
+			},
+			{
+				"id": "prop:description",
+				"key": "description",
+				"title": "Description",
+				"type": "rich_text"
+			},
+			{
+				"id": "prop:cuisine",
+				"key": "cuisine",
+				"title": "Cuisine",
+				"type": "select",
+				"options": [
+					{ "id": "opt:italian", "name": "Italian" },
+					{ "id": "opt:mexican", "name": "Mexican" },
+					{ "id": "opt:asian", "name": "Asian" },
+					{ "id": "opt:american", "name": "American" },
+					{ "id": "opt:mediterranean", "name": "Mediterranean" }
+				]
+			},
+			{
+				"id": "prop:category",
+				"key": "category",
+				"title": "Category",
+				"type": "select",
+				"options": [
+					{ "id": "opt:breakfast", "name": "Breakfast" },
+					{ "id": "opt:lunch", "name": "Lunch" },
+					{ "id": "opt:dinner", "name": "Dinner" },
+					{ "id": "opt:dessert", "name": "Dessert" },
+					{ "id": "opt:snack", "name": "Snack" }
+				]
+			},
+			{
+				"id": "prop:difficulty",
+				"key": "difficulty",
+				"title": "Difficulty",
+				"type": "select",
+				"options": [
+					{ "id": "opt:easy", "name": "Easy" },
+					{ "id": "opt:medium", "name": "Medium" },
+					{ "id": "opt:hard", "name": "Hard" }
+				]
+			},
+			{
+				"id": "prop:prep-time",
+				"key": "prepTime",
+				"title": "Prep Time",
+				"type": "number"
+			},
+			{
+				"id": "prop:cook-time",
+				"key": "cookTime",
+				"title": "Cook Time",
+				"type": "number"
+			},
+			{
+				"id": "prop:total-time",
+				"key": "totalTime",
+				"title": "Total Time",
+				"type": "formula"
+			},
+			{
+				"id": "prop:servings",
+				"key": "servings",
+				"title": "Servings",
+				"type": "number"
+			},
+			{
+				"id": "prop:calories",
+				"key": "calories",
+				"title": "Calories",
+				"type": "number"
+			},
+			{
+				"id": "prop:rating",
+				"key": "rating",
+				"title": "Rating",
+				"type": "number"
+			},
+			{
+				"id": "prop:ingredients",
+				"key": "ingredients",
+				"title": "Ingredients",
+				"type": "multi_select"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "recipe:pasta-carbonara",
+			"@type": "Recipe",
+			"name": "Classic Pasta Carbonara",
+			"description": "Traditional Italian pasta dish with eggs, cheese, and pancetta",
+			"cuisine": "Italian",
+			"category": "Dinner",
+			"difficulty": "Medium",
+			"prepTime": "10 min",
+			"cookTime": "20 min",
+			"totalTime": { "@expr": "prepTime + cookTime" },
+			"servings": 4,
+			"calories": "520 kcal",
+			"rating": 4.8,
+			"ingredients": ["spaghetti", "eggs", "pancetta", "parmesan", "black pepper"]
+		},
+		{
+			"@id": "recipe:tacos",
+			"@type": "Recipe",
+			"name": "Beef Tacos",
+			"description": "Flavorful Mexican tacos with seasoned ground beef",
+			"cuisine": "Mexican",
+			"category": "Dinner",
+			"difficulty": "Easy",
+			"prepTime": "15 min",
+			"cookTime": "15 min",
+			"totalTime": { "@expr": "prepTime + cookTime" },
+			"servings": 6,
+			"calories": "380 kcal",
+			"rating": 4.5,
+			"ingredients": ["ground beef", "taco shells", "lettuce", "tomatoes", "cheese", "sour cream"]
+		},
+		{
+			"@id": "recipe:pad-thai",
+			"@type": "Recipe",
+			"name": "Pad Thai",
+			"description": "Thai stir-fried noodles with shrimp and peanuts",
+			"cuisine": "Asian",
+			"category": "Lunch",
+			"difficulty": "Medium",
+			"prepTime": "20 min",
+			"cookTime": "15 min",
+			"totalTime": { "@expr": "prepTime + cookTime" },
+			"servings": 4,
+			"calories": "450 kcal",
+			"rating": 4.7,
+			"ingredients": ["rice noodles", "shrimp", "eggs", "peanuts", "bean sprouts", "lime"]
+		},
+		{
+			"@id": "recipe:pancakes",
+			"@type": "Recipe",
+			"name": "Fluffy Pancakes",
+			"description": "Light and fluffy American-style pancakes",
+			"cuisine": "American",
+			"category": "Breakfast",
+			"difficulty": "Easy",
+			"prepTime": "10 min",
+			"cookTime": "15 min",
+			"totalTime": { "@expr": "prepTime + cookTime" },
+			"servings": 4,
+			"calories": "280 kcal",
+			"rating": 4.6,
+			"ingredients": ["flour", "milk", "eggs", "butter", "baking powder", "sugar"]
+		},
+		{
+			"@id": "recipe:greek-salad",
+			"@type": "Recipe",
+			"name": "Greek Salad",
+			"description": "Fresh Mediterranean salad with feta and olives",
+			"cuisine": "Mediterranean",
+			"category": "Lunch",
+			"difficulty": "Easy",
+			"prepTime": "15 min",
+			"cookTime": "0 min",
+			"totalTime": { "@expr": "prepTime + cookTime" },
+			"servings": 4,
+			"calories": "180 kcal",
+			"rating": 4.4,
+			"ingredients": ["tomatoes", "cucumber", "feta cheese", "olives", "red onion", "olive oil"]
+		},
+		{
+			"@id": "recipe:chocolate-cake",
+			"@type": "Recipe",
+			"name": "Chocolate Cake",
+			"description": "Rich and moist chocolate layer cake",
+			"cuisine": "American",
+			"category": "Dessert",
+			"difficulty": "Hard",
+			"prepTime": "30 min",
+			"cookTime": "35 min",
+			"totalTime": { "@expr": "prepTime + cookTime" },
+			"servings": 12,
+			"calories": "420 kcal",
+			"rating": 4.9,
+			"ingredients": ["flour", "cocoa powder", "sugar", "eggs", "butter", "vanilla", "chocolate"]
+		}
+	]
+}

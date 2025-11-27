@@ -1,0 +1,8 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id": "ex:calc1",
+  "a": 2,
+  "b": 3,
+  "sum": {"@expr": "a + b * 4"}
+}
+

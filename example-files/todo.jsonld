@@ -1,0 +1,810 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Project",
+  "name": "Animation Agent Roadmap",
+  "identifier": "ANIM",
+  "provider": {
+    "@type": "Organization",
+    "name": "Turtle Labs LLC"
+  },
+  "hasPart": [
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-1",
+      "name": "Zoomable timeline",
+      "description": "Implement smooth zoom functionality for the timeline to allow users to focus on precise keyframe timing or view the entire animation at a glance. Essential for working with complex animations that span different time scales.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "timeline",
+        "ux"
+      ],
+      "priority": 2,
+      "estimate": 2,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Users need both macro (full timeline) and micro (frame-by-frame) views. Industry standard in tools like After Effects and Premiere. Reduces cognitive load by allowing focus on relevant time ranges.",
+      "acceptanceCriteria": [
+        "Users can zoom in/out using mouse wheel or pinch gesture",
+        "Zoom centers on cursor/pointer position for predictable navigation",
+        "Min zoom: 10ms per viewport width, Max zoom: entire animation visible",
+        "Smooth 60fps animation during zoom transitions (no jank)",
+        "Keyboard shortcuts (Cmd/Ctrl + Plus/Minus) for accessibility",
+        "Zoom level indicator visible in UI",
+        "Zoom state persists during session",
+        "Focus indicators remain visible at all zoom levels"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-2",
+      "name": "Disable playback + export if no keyframes or elements",
+      "description": "✓ COMPLETED - Prevent users from triggering playback or export when there's nothing to animate. Provides clear feedback about why actions are disabled, following error prevention principles.",
+      "workflowState": {
+        "name": "Done"
+      },
+      "labels": [
+        "guardrails",
+        "timeline"
+      ],
+      "priority": 1,
+      "estimate": 1,
+      "userImpact": "medium",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Error prevention over error recovery. Disabled states prevent confusion and wasted actions. Follows Nielsen's heuristic: help users recognize, diagnose, and recover from errors.",
+      "acceptanceCriteria": [
+        "Play button disabled when timeline is empty",
+        "Export button disabled when no animation data exists",
+        "Tooltip explains why action is unavailable (clear affordance)",
+        "Empty state design guides users to add elements",
+        "Disabled state has WCAG AA contrast ratio (4.5:1 minimum)",
+        "Screen reader announces disabled state and reason"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-3",
+      "name": "Resizable timeline",
+      "description": "Allow users to adjust timeline height to suit their workflow - compact for more canvas space, or expanded for detailed keyframe work. Especially important for multi-track animations where vertical space is precious.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "timeline",
+        "ux"
+      ],
+      "priority": 3,
+      "estimate": 2,
+      "userImpact": "medium",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "User control and freedom (Nielsen's heuristic #3). Different tasks require different space allocation. Some users prefer larger canvas, others need timeline detail. Let users optimize their own workspace.",
+      "acceptanceCriteria": [
+        "Drag handle between timeline and canvas is discoverable (clear visual affordance)",
+        "Smooth resize with min height of 120px, max 60% of viewport",
+        "Resize state persists across sessions (localStorage)",
+        "Double-click handle to reset to default height (convention)",
+        "Cursor changes to ns-resize on hover",
+        "No performance degradation during resize",
+        "Keyboard accessible: Tab to handle, Arrow keys to resize",
+        "ARIA live region announces new height for screen readers"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-4",
+      "name": "Multiplayer (realtime collaboration)",
+      "description": "Enable multiple users to work on the same animation simultaneously with conflict resolution, presence indicators, and real-time synchronization. Critical for team workflows and remote collaboration. Modern expectation for creative tools.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "collab",
+        "realtime"
+      ],
+      "priority": 2,
+      "estimate": 8,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": ["ANIM-5"],
+      "blockedBy": ["WebSocket infrastructure decision", "CRDT vs OT architecture choice"],
+      "uxRationale": "Collaborative tools reduce iteration cycles and enable async + sync work. Presence awareness prevents conflicts and builds team transparency. Figma proved this is table stakes for modern creative tools.",
+      "acceptanceCriteria": [
+        "Real-time cursor positions with user identification (name/avatar/color)",
+        "Selection highlights show what other users are editing",
+        "Operational transformation or CRDT for conflict-free merges",
+        "Optimistic updates with rollback on conflict",
+        "Connection status indicator (online/offline/syncing) always visible",
+        "Collaborative cursor names fade after 2s of inactivity",
+        "Share link generation with permission management (view/edit)",
+        "Activity feed shows who made what changes (audit trail)",
+        "Graceful handling of network failures with offline queue",
+        "Max 100ms perceived latency for actions",
+        "Screen reader announces when users join/leave session",
+        "High contrast mode for cursor colors (accessibility)"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-5",
+      "name": "Undo/Redo",
+      "description": "Implement comprehensive undo/redo system for all user actions. Non-negotiable for professional creative tools - users must feel safe to experiment without fear of breaking their work. Foundation for all editing workflows.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "editing",
+        "history"
+      ],
+      "priority": 1,
+      "estimate": 3,
+      "userImpact": "critical",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Psychological safety enables creativity. Command pattern provides reversibility. Industry standard shortcuts (Cmd+Z) create zero learning curve. Must be implemented before any complex editing features.",
+      "acceptanceCriteria": [
+        "Keyboard shortcuts: Cmd/Ctrl+Z (undo), Cmd/Ctrl+Shift+Z (redo)",
+        "Visual indication when undo/redo is available (button states)",
+        "Minimum 50 actions in history stack (more is better)",
+        "All mutations tracked: add/delete/modify elements, keyframes, properties",
+        "History preserved during session but cleared on close",
+        "Grouped actions for batch operations (e.g., multi-select delete = 1 undo)",
+        "History panel shows action labels (optional enhancement)",
+        "No performance impact on large histories (efficient data structure)",
+        "Screen reader announces undo/redo actions with descriptive labels",
+        "Works seamlessly with multiplayer (ANIM-4) when implemented"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-6",
+      "name": "Save/Export",
+      "description": "✓ COMPLETED - Save project state and export animations in multiple formats. Core functionality for any creative tool. Includes auto-save to prevent data loss.",
+      "workflowState": {
+        "name": "Done"
+      },
+      "labels": [
+        "io"
+      ],
+      "priority": 1,
+      "estimate": 2,
+      "userImpact": "critical",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Data persistence is fundamental. Auto-save removes cognitive burden. Multiple export formats maximize utility. Clear save status reduces anxiety.",
+      "acceptanceCriteria": [
+        "Auto-save every 30s when changes detected (background, non-intrusive)",
+        "Manual save with Cmd/Ctrl+S keyboard shortcut",
+        "Export formats: JSON (project file), video (MP4), GIF, GSAP code",
+        "Visual save indicator shows last saved timestamp",
+        "Warn before closing with unsaved changes (prevent data loss)",
+        "Export progress indicator for large files with cancel option",
+        "Export settings remembered per format",
+        "Screen reader announces save status"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-7",
+      "name": "GSAP code editor",
+      "description": "Provide a live code editor that shows the generated GSAP code and allows direct editing with two-way sync. Bridges visual and code-based workflows for power users and developers who need precise control.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "gsap",
+        "devtools"
+      ],
+      "priority": 3,
+      "estimate": 5,
+      "userImpact": "medium",
+      "accessibility": true,
+      "requires": ["ANIM-6"],
+      "blockedBy": [],
+      "uxRationale": "Different users have different mental models. Some think visually, others in code. Two-way binding respects both. Essential for learning GSAP and for advanced customization. Transparency builds trust.",
+      "acceptanceCriteria": [
+        "Syntax-highlighted GSAP code display using Monaco or CodeMirror",
+        "Two-way binding: visual changes update code, code edits update timeline",
+        "Real-time validation with error highlighting and line numbers",
+        "Copy code button with toast confirmation",
+        "Toggle between timeline view and code view (split screen optional)",
+        "Auto-format code on generation (Prettier integration)",
+        "Support for custom GSAP plugins in code",
+        "Keyboard shortcuts work in editor (Cmd+S saves, etc.)",
+        "Accessible error messages with clear fix suggestions",
+        "Dark mode syntax theme matches app theme",
+        "Code editor supports keyboard navigation and screen readers"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-8",
+      "name": "Context menus",
+      "description": "✓ COMPLETED - Right-click context menus for quick access to common actions on elements, keyframes, and timeline regions. Reduces mouse travel and speeds up workflows.",
+      "workflowState": {
+        "name": "Done"
+      },
+      "labels": [
+        "ux"
+      ],
+      "priority": 2,
+      "estimate": 1,
+      "userImpact": "medium",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Context menus follow Fitts's Law - reduce cursor distance for frequent actions. Discovery mechanism for keyboard shortcuts. Standard interaction pattern users expect.",
+      "acceptanceCriteria": [
+        "Context-aware menu items based on selection type",
+        "Keyboard navigation within menus (arrow keys, Enter, Esc)",
+        "Common actions: copy, paste, delete, duplicate, properties",
+        "Disabled items shown but grayed out with tooltip explanation",
+        "Menu closes on outside click, Esc key, or selection",
+        "Icons for visual scanning and faster recognition",
+        "Keyboard shortcuts displayed next to menu items",
+        "ARIA roles and labels for screen reader support",
+        "Context menus can be triggered via keyboard (Shift+F10 or Context Menu key)"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-9",
+      "name": "Groups",
+      "description": "Enable grouping of multiple elements to animate them together, create nested hierarchies, and organize complex scenes. Essential for scalable animation projects and maintaining mental models of complex compositions.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "scenegraph"
+      ],
+      "priority": 2,
+      "estimate": 3,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Chunking reduces cognitive load (Miller's Law - 7±2 items). Groups create visual and conceptual hierarchy. Industry standard in all design tools (Figma, Sketch, Illustrator). Enables component thinking.",
+      "acceptanceCriteria": [
+        "Select multiple elements and group via Cmd/Ctrl+G",
+        "Ungroup with Cmd/Ctrl+Shift+G",
+        "Nested groups supported (parent-child relationships)",
+        "Group transformations affect all children (position, scale, rotation)",
+        "Collapse/expand groups in timeline for visual clarity",
+        "Group naming with inline editing on double-click",
+        "Visual indication of group membership (indentation, icon, color)",
+        "Drag-and-drop to add/remove from groups",
+        "Selecting group selects all children (with Alt modifier for group only)",
+        "Keyboard navigation through group hierarchy (arrow keys)",
+        "Screen reader announces group structure and nesting level"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-10",
+      "name": "GSAP physics",
+      "description": "Integrate physics-based animations (gravity, velocity, bounce, elasticity) using GSAP's physics plugins. Adds organic, natural motion to animations that's difficult to keyframe manually. Enhances realism and polish.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "gsap",
+        "physics"
+      ],
+      "priority": 3,
+      "estimate": 5,
+      "userImpact": "medium",
+      "accessibility": false,
+      "requires": [],
+      "blockedBy": ["GSAP Physics2D plugin licensing decision"],
+      "uxRationale": "Physics creates believable motion that aligns with user expectations from the physical world. Reduces manual keyframing for complex natural movements. Differentiator from simpler animation tools.",
+      "acceptanceCriteria": [
+        "Physics presets: gravity, bounce, elastic, momentum, friction",
+        "Adjustable physics parameters via UI sliders (gravity strength, elasticity, etc.)",
+        "Visual preview of physics trajectory (dotted path)",
+        "Can combine physics with keyframe animations",
+        "Physics simulations are deterministic (repeatable results)",
+        "Performance optimized for multiple physics objects (60fps minimum)",
+        "Toggle physics on/off per element without losing settings",
+        "Physics parameter tooltips explain effect (e.g., 'Higher = faster fall')",
+        "Presets preview in modal before application"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-11",
+      "name": "Pre-set transitions",
+      "description": "✓ COMPLETED - Library of pre-built transition effects (fade, slide, scale, rotate, etc.) for quick application to elements. Accelerates workflow for common animation patterns and provides starting points for customization.",
+      "workflowState": {
+        "name": "Done"
+      },
+      "labels": [
+        "library",
+        "ux"
+      ],
+      "priority": 2,
+      "estimate": 2,
+      "userImpact": "high",
+      "accessibility": false,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Progressive disclosure - simple presets lower entry barrier. Recognition over recall - seeing options is easier than remembering syntax. Time-saving for common tasks lets users focus on creative decisions.",
+      "acceptanceCriteria": [
+        "Gallery of 10+ common transitions with animated previews",
+        "Drag-and-drop or click to apply transition to selected element",
+        "Customizable parameters after application (duration, easing, etc.)",
+        "Search/filter transitions by name or category",
+        "Visual preview plays on hover (auto-loops)",
+        "Favorites/recent transitions for quick access",
+        "Transition library organized by category (entrance, exit, emphasis)",
+        "Keyboard navigation through transition gallery"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-12",
+      "name": "Generative AI",
+      "description": "Integrate AI to generate animations from natural language descriptions, suggest timing improvements, or create variations. Experimental feature to enhance creativity and speed up ideation phase. Must maintain user agency.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "ai"
+      ],
+      "priority": 4,
+      "estimate": 8,
+      "userImpact": "low",
+      "accessibility": true,
+      "requires": ["ANIM-5", "ANIM-13", "ANIM-14"],
+      "blockedBy": ["AI service provider selection", "Cost structure decision", "Ethical AI guidelines"],
+      "uxRationale": "AI as copilot, not autopilot. Accelerates ideation without removing creative control. Must be opt-in and transparent. Reduces blank canvas paralysis. Lower priority until core features are solid.",
+      "acceptanceCriteria": [
+        "Text prompt input for animation generation (e.g., 'bounce in from left')",
+        "AI suggests keyframe placement, easing, and timing",
+        "Multiple variations generated per prompt for choice",
+        "Users can refine prompts iteratively with feedback",
+        "Clear indication of AI-generated content (badge/icon)",
+        "Option to accept/reject/modify AI suggestions",
+        "Respects existing animation when adding AI elements (non-destructive)",
+        "Error handling for API failures with graceful degradation",
+        "Cost/credit system communicated transparently if applicable",
+        "AI suggestions include confidence scores",
+        "Keyboard accessible for prompt input and suggestion review",
+        "Screen reader describes AI suggestions clearly"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-13",
+      "name": "Image support",
+      "description": "Support importing and animating raster images (PNG, JPG, WebP, SVG). Fundamental for most animation projects that include visual assets. Cannot have an animation tool without the ability to animate images.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "media"
+      ],
+      "priority": 1,
+      "estimate": 3,
+      "userImpact": "critical",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Core functionality. Most animations include images. File upload must be frictionless. Immediate visual feedback builds confidence. Alt text requirement ensures accessibility from the start.",
+      "acceptanceCriteria": [
+        "Drag-and-drop image upload from desktop with visual drop zone",
+        "Paste images from clipboard (Cmd/Ctrl+V)",
+        "Supported formats: PNG, JPG, JPEG, WebP, SVG",
+        "Image optimization/compression options (quality slider)",
+        "Maintain aspect ratio by default (unlock option for custom ratios)",
+        "Image preview in asset panel with filename and dimensions",
+        "Max file size 10MB with clear error message if exceeded",
+        "Alt text field required for accessibility (prompt on upload)",
+        "Image replacement without losing animations",
+        "Loading state during upload with progress indicator",
+        "Keyboard accessible upload button as alternative to drag-drop",
+        "Screen reader announces successful upload"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-14",
+      "name": "Text support",
+      "description": "Add text elements with customizable typography, colors, and styling. Essential for motion graphics, title sequences, and explanatory animations. Foundation for text-specific animations (ANIM-15).",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "text"
+      ],
+      "priority": 1,
+      "estimate": 2,
+      "userImpact": "critical",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Text is fundamental content type. Must be as easy as design tools (Figma, Canva). Inline editing feels direct. Typography controls must be discoverable but not overwhelming. Font loading performance matters.",
+      "acceptanceCriteria": [
+        "Click-to-add text tool or keyboard shortcut (T key)",
+        "Inline editing with contenteditable (double-click to edit)",
+        "Font family selector with web-safe fonts + Google Fonts integration",
+        "Font size, weight, line height, letter spacing controls",
+        "Text alignment (left, center, right, justify) with visual buttons",
+        "Color picker for text color with recent colors palette",
+        "Multi-line support with proper line breaks (Enter key)",
+        "Text stroke and shadow effects (advanced panel)",
+        "Character/word/line count indicator",
+        "Text maintains editability after animation applied",
+        "Font loading indicator for Google Fonts",
+        "Keyboard shortcuts for text formatting (Cmd+B for bold, etc.)",
+        "Accessible color contrast checker warns if text/background ratio insufficient",
+        "Screen reader support for text editing"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-15",
+      "name": "Text animations",
+      "description": "Specialized text animation effects: character-by-character reveals, split animations, scrambles, and typewriter effects. Professional-grade text motion that's difficult to achieve manually. Depends on ANIM-14 (Text Support).",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "text",
+        "animation"
+      ],
+      "priority": 2,
+      "estimate": 3,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": ["ANIM-14"],
+      "blockedBy": ["GSAP SplitText plugin licensing"],
+      "uxRationale": "Text animation is a key differentiator for motion graphics tools. Character-level control enables effects impossible with standard transforms. Presets make advanced techniques accessible to beginners.",
+      "acceptanceCriteria": [
+        "Character-level animation (each letter animated independently)",
+        "Word-level and line-level animation options",
+        "Pre-set text effects: typewriter, scramble, split (curtain), reveal, shuffle",
+        "Stagger controls for sequential character animation (delay, ease)",
+        "Text mask/clip path animations (wipe in/out)",
+        "Performance optimized for long text blocks (virtual rendering if needed)",
+        "Text remains accessible during animations (not just decorative)",
+        "Preserve text selectability where possible",
+        "Visual preview of stagger timing in timeline",
+        "Effect parameters adjustable after application",
+        "Prefers-reduced-motion respected (disable decorative text animations)"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-16",
+      "name": "Draw shapes",
+      "description": "Built-in shape tools for rectangles, circles, polygons, and stars. No need to import every simple shape from external tools. Reduces friction for creating geometric compositions and UI mockups.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "vector",
+        "canvas"
+      ],
+      "priority": 2,
+      "estimate": 5,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Shape tools are foundational in creative software. Click-and-drag feels natural. Constraint modifiers (Shift) follow conventions. Shapes are building blocks for complex illustrations. Self-contained workflow increases tool stickiness.",
+      "acceptanceCriteria": [
+        "Shape tools: rectangle, circle, triangle, polygon, star, line",
+        "Click-and-drag to draw with visual feedback",
+        "Proportional constraints with Shift key (perfect squares, circles)",
+        "Fill color, stroke color, and stroke width controls",
+        "Corner radius slider for rectangles (create rounded rectangles)",
+        "Point count selector for polygons and stars",
+        "Edit mode to adjust shape properties after creation",
+        "Convert shapes to paths for advanced editing (bridge to ANIM-17)",
+        "Snap to grid/guides option (toggle in preferences)",
+        "Shape tools accessible via keyboard shortcuts (R for rectangle, C for circle, etc.)",
+        "Visual tool cursor changes to indicate active shape tool",
+        "Keyboard modifier info displayed in status bar during draw",
+        "Screen reader announces shape type, dimensions, and properties"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-17",
+      "name": "Draw paths",
+      "description": "Pen tool for drawing custom bezier paths, with path editing and morphing capabilities. Advanced feature for custom illustrations, motion paths, and path-based animations. Requires significant learning curve but unlocks professional workflows.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "vector",
+        "canvas"
+      ],
+      "priority": 3,
+      "estimate": 5,
+      "userImpact": "medium",
+      "accessibility": true,
+      "requires": ["ANIM-16"],
+      "blockedBy": ["GSAP MorphSVG plugin licensing for morphing"],
+      "uxRationale": "Pen tool is standard in vector tools (Illustrator, Figma). High learning curve but essential for power users. Motion paths enable follow-path animations. Path morphing creates organic transitions. Must match conventions to minimize relearning.",
+      "acceptanceCriteria": [
+        "Pen tool creates bezier curves with anchor points (P key shortcut)",
+        "Handle manipulation for curve control (click-drag to adjust tangents)",
+        "Add/remove anchor points on existing paths",
+        "Convert between smooth and corner points (Alt+click)",
+        "Closed vs. open paths (auto-close when clicking start point)",
+        "Path stroke and fill styling",
+        "Animate along path (motion path feature) with orientation control",
+        "SVG path import/export for interop with design tools",
+        "Path morphing animations between shapes (blend shapes)",
+        "Keyboard modifiers during draw (Shift for straight lines, etc.)",
+        "Visual feedback for hover states on handles and points",
+        "Undo/redo works for individual anchor point operations",
+        "Accessible keyboard shortcuts for path operations",
+        "High contrast mode for anchor points and handles"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-18",
+      "name": "GIF support",
+      "description": "Import animated GIFs as elements and export animations as GIFs. Useful for social media, email marketing, and web use cases where video isn't supported. GIF export quality and file size are critical concerns.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "media",
+        "io"
+      ],
+      "priority": 3,
+      "estimate": 2,
+      "userImpact": "medium",
+      "accessibility": false,
+      "requires": ["ANIM-6", "ANIM-13"],
+      "blockedBy": [],
+      "uxRationale": "GIFs still dominate certain platforms despite video advances. Export quality/size tradeoff must be transparent. File size warnings prevent user frustration. Preview before export builds confidence.",
+      "acceptanceCriteria": [
+        "Import GIFs with animation preserved (plays in timeline)",
+        "Export animation as optimized GIF",
+        "GIF export settings: frame rate, quality, loop count, dimensions",
+        "Preview GIF before export (actual rendering, not approximation)",
+        "File size estimation displayed prominently during export config",
+        "Warning for large file sizes (>5MB) with optimization suggestions",
+        "Dithering options for quality/size balance (Floyd-Steinberg)",
+        "Color palette reduction options (256, 128, 64 colors)",
+        "Export progress bar with cancel option",
+        "Alt text from elements preserved in GIF metadata where supported"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-19",
+      "name": "Video support",
+      "description": "Import video files as elements and export animations as video (MP4). Critical for video editing workflows, social media content, and professional output. Must handle audio tracks and provide quality export options.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "media"
+      ],
+      "priority": 2,
+      "estimate": 8,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": ["ANIM-20"],
+      "blockedBy": ["Video codec library decision (FFmpeg vs browser APIs)", "Server-side rendering infrastructure"],
+      "uxRationale": "Video is expected output format for modern animation tools. Export quality directly affects user's work quality. Progress indicators reduce anxiety for long exports. Preset export profiles reduce decision fatigue.",
+      "acceptanceCriteria": [
+        "Import video formats: MP4, WebM, MOV with format detection",
+        "Video playback synced with timeline scrubbing",
+        "Trim video clips within timeline (in/out points)",
+        "Export as MP4 with H.264 codec (wide compatibility)",
+        "Audio track support (mute/unmute per clip)",
+        "Video export progress bar with time remaining estimate",
+        "Resolution presets: 720p, 1080p, 4K with custom option",
+        "Frame rate matching source or custom (24, 30, 60 fps)",
+        "Bitrate/quality selector (Low, Medium, High, Custom)",
+        "Export presets for common platforms (YouTube, Instagram, Twitter)",
+        "Thumbnail generation for video clips in timeline",
+        "Captions/subtitles support for accessibility",
+        "Export with transparent background (WebM with alpha channel)",
+        "Cancel export with confirmation dialog"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-20",
+      "name": "Audio support",
+      "description": "Add audio tracks to animations with waveform visualization and audio-reactive features. Enhances motion graphics with sound design. Foundation for video export with audio (ANIM-19). Waveform helps visual timing.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "media",
+        "audio"
+      ],
+      "priority": 2,
+      "estimate": 5,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": [],
+      "blockedBy": [],
+      "uxRationale": "Audio-visual synchronization is critical for motion graphics. Waveform provides visual reference for timing. Audio-reactive animations create music videos and data viz. Multitrack enables sound design workflows.",
+      "acceptanceCriteria": [
+        "Import audio formats: MP3, WAV, OGG, AAC",
+        "Waveform visualization in timeline (amplitude over time)",
+        "Volume controls per track (0-100% slider + dB display)",
+        "Fade in/out handles on audio clips (drag edges)",
+        "Audio playback synced with animation preview",
+        "Mute/solo audio tracks (standard DAW pattern)",
+        "Audio-reactive animations (amplitude/frequency-based)",
+        "Multiple audio tracks with mixing (up to 8 tracks)",
+        "Audio trimming with visual in/out points",
+        "Audio offset adjustment (slide audio independent of clip)",
+        "Audio export in final video with mixing applied",
+        "Waveform zoom for detailed timing",
+        "Audio meter shows levels during playback",
+        "Accessibility: visual indicators for audio events",
+        "Transcript/captions support for audio content"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-21",
+      "name": "Scroll mode",
+      "description": "Create scroll-triggered animations that play as users scroll down a page. Essential for modern web storytelling, marketing sites, and interactive articles. Toggles between time-based and scroll-based animation modes.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "scrollytelling",
+        "runtime"
+      ],
+      "priority": 2,
+      "estimate": 5,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": ["ANIM-6"],
+      "blockedBy": [],
+      "uxRationale": "Scroll-driven narratives are modern web standard (Apple, NYT). Mode switching must be clear to prevent confusion. Scrubbing preview is essential for debugging. ScrollTrigger export enables web implementation. Accessibility considerations critical.",
+      "acceptanceCriteria": [
+        "Toggle between time-based and scroll-based modes (prominent switch)",
+        "Scroll position indicator in timeline (maps scroll % to time)",
+        "Set scroll triggers: start position, end position, scrub",
+        "Pin elements during scroll ranges (sticky positioning)",
+        "Preview scroll animations within editor (simulated scroll)",
+        "Export as ScrollTrigger GSAP code with all settings",
+        "Responsive scroll behavior preview (mobile vs desktop)",
+        "Scrub animation by dragging scroll position indicator",
+        "Scroll velocity affects animation (optional)",
+        "Accessibility: prefers-reduced-motion disables scroll effects",
+        "Keyboard navigation alternative for scroll-triggered content",
+        "Visual markers show trigger points in preview",
+        "Scroll snap points for discrete sections"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-22",
+      "name": "Community page",
+      "description": "Public gallery where users can share animations, browse templates, and remix others' work. Builds community engagement, provides inspiration, and creates network effects. Requires moderation infrastructure and clear content policies.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "growth",
+        "community"
+      ],
+      "priority": 4,
+      "estimate": 5,
+      "userImpact": "medium",
+      "accessibility": true,
+      "requires": ["ANIM-6", "ANIM-13", "ANIM-14"],
+      "blockedBy": ["Content moderation policy", "DMCA compliance strategy", "Community guidelines"],
+      "uxRationale": "Community features drive engagement and retention but shouldn't distract from core tool. Pinterest-style browsing enables discovery. Remix culture accelerates learning. Lower priority until product-market fit proven for core tool.",
+      "acceptanceCriteria": [
+        "Upload animations to public gallery (opt-in, not default)",
+        "Browse animations with responsive grid layout",
+        "Filter by category (motion graphics, explainer, ui animation, etc.)",
+        "Sort by popularity (likes), recency, trending",
+        "Search animations by keywords, tags, creator name",
+        "Like/favorite animations with visual feedback",
+        "Remix/duplicate public animations to your workspace (fork)",
+        "User profiles with animation collections and bio",
+        "Follow system for creators",
+        "Moderation tools: report content, admin review queue",
+        "Responsive gallery layout (masonry grid)",
+        "Animation cards show preview thumbnail, title, creator, likes",
+        "Preview animation on hover without leaving gallery",
+        "Keyboard navigation through gallery",
+        "Screen reader announces gallery structure and animation details",
+        "High contrast mode for UI elements",
+        "Content warnings for sensitive animations"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-23",
+      "name": "Scene transitions",
+      "description": "Support multiple scenes within a project with smooth transitions between them. Allows complex narratives without cluttering a single timeline. Scenes act as composition containers, enabling reusable components and cleaner organization.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "animation",
+        "library"
+      ],
+      "priority": 2,
+      "estimate": 3,
+      "userImpact": "high",
+      "accessibility": false,
+      "requires": ["ANIM-9"],
+      "blockedBy": [],
+      "uxRationale": "Scenes reduce timeline complexity (chunking). Similar to pages in design tools or scenes in video editors. Master timeline provides overview. Transitions between scenes create narrative flow. Essential for story-driven animations.",
+      "acceptanceCriteria": [
+        "Create multiple scenes within a project (+ button in scenes panel)",
+        "Scene navigator shows thumbnails with scene names",
+        "Drag-and-drop to reorder scenes",
+        "Transition effects between scenes: fade, slide, wipe, custom",
+        "Transition duration configurable per scene",
+        "Scene duration settings (fixed or auto-fit to content)",
+        "Copy/paste elements across scenes",
+        "Master timeline shows all scenes sequentially with boundaries",
+        "Scene naming with inline editing",
+        "Scene color coding for visual organization",
+        "Duplicate scene with all content",
+        "Scene templates for quick setup",
+        "Isolate/solo scene for focused editing",
+        "Keyboard shortcuts: Cmd+Shift+N for new scene, Cmd+J/K to navigate",
+        "Visual scene boundaries in timeline"
+      ]
+    },
+    {
+      "@type": "CreativeWork",
+      "identifier": "ANIM-24",
+      "name": "Assets panel",
+      "description": "Centralized panel for managing all project assets (images, videos, audio, fonts). Provides quick access, reusability across scenes, and visibility into asset usage. Critical for organization as projects scale.",
+      "workflowState": {
+        "name": "Todo"
+      },
+      "labels": [
+        "asset-pipeline"
+      ],
+      "priority": 2,
+      "estimate": 5,
+      "userImpact": "high",
+      "accessibility": true,
+      "requires": ["ANIM-13", "ANIM-19", "ANIM-20"],
+      "blockedBy": [],
+      "uxRationale": "Asset management prevents chaos. Drag-from-panel workflow feels natural. Usage indicators help cleanup. Grid/list views accommodate preferences. Search reduces scroll fatigue. Industry standard in creative tools.",
+      "acceptanceCriteria": [
+        "Asset panel shows all imported media with thumbnails",
+        "Toggle between grid view (visual) and list view (detailed)",
+        "Search/filter assets by name, type, or tags",
+        "Drag asset from panel to canvas to add to scene",
+        "Asset metadata visible: file size, dimensions, duration (video/audio), format",
+        "Delete unused assets with confirmation",
+        "Asset usage indicator shows which scenes use each asset",
+        "Replace asset feature (updates all instances in project)",
+        "Thumbnail previews for all asset types (animated for GIFs/videos)",
+        "Sort by: name, size, date added, usage frequency",
+        "Batch operations: select multiple, delete, tag",
+        "Asset tags for custom organization",
+        "Color labels for visual categorization",
+        "Quick preview on hover or spacebar press",
+        "Keyboard navigation: arrow keys, Enter to add to canvas",
+        "Screen reader announces asset type, name, and metadata",
+        "Alt text editing for images directly in panel",
+        "Unused assets highlighted for cleanup"
+      ]
+    }
+  ]
+}

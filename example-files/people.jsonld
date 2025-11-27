@@ -1,0 +1,151 @@
+{
+	"@context": {
+		"name": "https://schema.org/name",
+		"email": "https://schema.org/email",
+		"role": "https://schema.org/jobTitle",
+		"department": "https://schema.org/department",
+		"skills": "https://schema.org/skills",
+		"location": "https://schema.org/workLocation",
+		"startDate": "https://schema.org/startDate",
+		"manager": {
+			"@id": "https://schema.org/employee",
+			"@type": "@id"
+		}
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Team Directory",
+			"description": "Company team members, roles, and organizational structure."
+		},
+		"properties": [
+			{
+				"id": "prop:name",
+				"key": "name",
+				"title": "Full Name",
+				"type": "title"
+			},
+			{
+				"id": "prop:email",
+				"key": "email",
+				"title": "Email",
+				"type": "email"
+			},
+			{
+				"id": "prop:role",
+				"key": "role",
+				"title": "Role",
+				"type": "select",
+				"options": [
+					{ "id": "opt:engineer", "name": "Engineer" },
+					{ "id": "opt:senior-engineer", "name": "Senior Engineer" },
+					{ "id": "opt:lead", "name": "Tech Lead" },
+					{ "id": "opt:manager", "name": "Engineering Manager" },
+					{ "id": "opt:designer", "name": "Designer" },
+					{ "id": "opt:pm", "name": "Product Manager" }
+				]
+			},
+			{
+				"id": "prop:department",
+				"key": "department",
+				"title": "Department",
+				"type": "select",
+				"options": [
+					{ "id": "opt:engineering", "name": "Engineering" },
+					{ "id": "opt:design", "name": "Design" },
+					{ "id": "opt:product", "name": "Product" },
+					{ "id": "opt:ops", "name": "Operations" }
+				]
+			},
+			{
+				"id": "prop:skills",
+				"key": "skills",
+				"title": "Skills",
+				"type": "multi_select"
+			},
+			{
+				"id": "prop:location",
+				"key": "location",
+				"title": "Location",
+				"type": "select",
+				"options": [
+					{ "id": "opt:sf", "name": "San Francisco" },
+					{ "id": "opt:ny", "name": "New York" },
+					{ "id": "opt:remote", "name": "Remote" },
+					{ "id": "opt:austin", "name": "Austin" }
+				]
+			},
+			{
+				"id": "prop:start-date",
+				"key": "startDate",
+				"title": "Start Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:manager",
+				"key": "manager",
+				"title": "Manager",
+				"type": "relation"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "person:alice",
+			"@type": "Person",
+			"name": "Alice Chen",
+			"email": "alice@company.com",
+			"role": "Tech Lead",
+			"department": "Engineering",
+			"skills": ["React", "TypeScript", "System Design", "Mentoring"],
+			"location": "San Francisco",
+			"startDate": { "start": "2022-03-15" }
+		},
+		{
+			"@id": "person:bob",
+			"@type": "Person",
+			"name": "Bob Martinez",
+			"email": "bob@company.com",
+			"role": "Senior Engineer",
+			"department": "Engineering",
+			"skills": ["Node.js", "PostgreSQL", "API Design", "DevOps"],
+			"location": "Austin",
+			"startDate": { "start": "2021-08-20" },
+			"manager": "person:alice"
+		},
+		{
+			"@id": "person:carol",
+			"@type": "Person",
+			"name": "Carol Williams",
+			"email": "carol@company.com",
+			"role": "Senior Engineer",
+			"department": "Engineering",
+			"skills": ["Full Stack", "AWS", "Kubernetes", "CI/CD"],
+			"location": "Remote",
+			"startDate": { "start": "2020-11-10" },
+			"manager": "person:alice"
+		},
+		{
+			"@id": "person:david",
+			"@type": "Person",
+			"name": "David Kim",
+			"email": "david@company.com",
+			"role": "Product Manager",
+			"department": "Product",
+			"skills": ["Product Strategy", "User Research", "Roadmapping", "Analytics"],
+			"location": "New York",
+			"startDate": { "start": "2023-01-05" }
+		},
+		{
+			"@id": "person:emma",
+			"@type": "Person",
+			"name": "Emma Johnson",
+			"email": "emma@company.com",
+			"role": "Designer",
+			"department": "Design",
+			"skills": ["UI Design", "Prototyping", "Design Systems", "Figma"],
+			"location": "San Francisco",
+			"startDate": { "start": "2022-09-12" }
+		}
+	]
+}

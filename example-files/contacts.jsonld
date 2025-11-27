@@ -1,0 +1,215 @@
+{
+	"@context": {
+		"name": "https://schema.org/name",
+		"email": "https://schema.org/email",
+		"telephone": "https://schema.org/telephone",
+		"jobTitle": "https://schema.org/jobTitle",
+		"company": "https://schema.org/worksFor",
+		"address": "https://schema.org/address",
+		"city": "https://schema.org/addressLocality",
+		"country": "https://schema.org/addressCountry",
+		"website": "https://schema.org/url",
+		"linkedin": "https://example.com/vocab/linkedinProfile",
+		"twitter": "https://example.com/vocab/twitterHandle",
+		"notes": "https://schema.org/description",
+		"tags": "https://schema.org/keywords",
+		"lastContact": "https://example.com/vocab/lastContactDate",
+		"priority": "https://example.com/vocab/priority"
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Contacts",
+			"description": "Contact management system with communication tracking."
+		},
+		"properties": [
+			{
+				"id": "prop:name",
+				"key": "name",
+				"title": "Name",
+				"type": "title"
+			},
+			{
+				"id": "prop:email",
+				"key": "email",
+				"title": "Email",
+				"type": "email"
+			},
+			{
+				"id": "prop:telephone",
+				"key": "telephone",
+				"title": "Phone",
+				"type": "phone_number"
+			},
+			{
+				"id": "prop:job-title",
+				"key": "jobTitle",
+				"title": "Job Title",
+				"type": "text"
+			},
+			{
+				"id": "prop:company",
+				"key": "company",
+				"title": "Company",
+				"type": "text"
+			},
+			{
+				"id": "prop:city",
+				"key": "city",
+				"title": "City",
+				"type": "text"
+			},
+			{
+				"id": "prop:country",
+				"key": "country",
+				"title": "Country",
+				"type": "text"
+			},
+			{
+				"id": "prop:priority",
+				"key": "priority",
+				"title": "Priority",
+				"type": "select",
+				"options": [
+					{ "id": "opt:high", "name": "High" },
+					{ "id": "opt:medium", "name": "Medium" },
+					{ "id": "opt:low", "name": "Low" }
+				]
+			},
+			{
+				"id": "prop:tags",
+				"key": "tags",
+				"title": "Tags",
+				"type": "multi_select"
+			},
+			{
+				"id": "prop:last-contact",
+				"key": "lastContact",
+				"title": "Last Contact",
+				"type": "date"
+			},
+			{
+				"id": "prop:website",
+				"key": "website",
+				"title": "Website",
+				"type": "url"
+			},
+			{
+				"id": "prop:linkedin",
+				"key": "linkedin",
+				"title": "LinkedIn",
+				"type": "url"
+			},
+			{
+				"id": "prop:notes",
+				"key": "notes",
+				"title": "Notes",
+				"type": "rich_text"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "contact:sarah-johnson",
+			"@type": "Person",
+			"name": "Sarah Johnson",
+			"email": "sarah.johnson@techventures.com",
+			"telephone": "+1-555-0123",
+			"jobTitle": "VP of Engineering",
+			"company": "TechVentures Inc",
+			"city": "San Francisco",
+			"country": "USA",
+			"priority": "High",
+			"tags": ["client", "decision-maker", "tech"],
+			"lastContact": { "start": "2025-09-28" },
+			"website": "https://techventures.com",
+			"linkedin": "https://linkedin.com/in/sarahjohnson",
+			"notes": "Key decision maker for Q4 partnership. Follow up on API integration proposal."
+		},
+		{
+			"@id": "contact:michael-chen",
+			"@type": "Person",
+			"name": "Michael Chen",
+			"email": "m.chen@innovatesoft.io",
+			"telephone": "+1-555-0456",
+			"jobTitle": "Product Manager",
+			"company": "InnovateSoft",
+			"city": "Austin",
+			"country": "USA",
+			"priority": "Medium",
+			"tags": ["prospect", "product", "saas"],
+			"lastContact": { "start": "2025-09-15" },
+			"website": "https://innovatesoft.io",
+			"linkedin": "https://linkedin.com/in/michaelchen",
+			"notes": "Interested in enterprise plan. Schedule demo for October."
+		},
+		{
+			"@id": "contact:emma-rodriguez",
+			"@type": "Person",
+			"name": "Emma Rodriguez",
+			"email": "emma@designstudio.co",
+			"telephone": "+1-555-0789",
+			"jobTitle": "Creative Director",
+			"company": "Design Studio Co",
+			"city": "New York",
+			"country": "USA",
+			"priority": "High",
+			"tags": ["partner", "design", "creative"],
+			"lastContact": { "start": "2025-10-01" },
+			"website": "https://designstudio.co",
+			"linkedin": "https://linkedin.com/in/emmarodriguez",
+			"notes": "Collaborating on brand refresh project. Weekly sync meetings."
+		},
+		{
+			"@id": "contact:james-wilson",
+			"@type": "Person",
+			"name": "James Wilson",
+			"email": "james.wilson@globalcorp.com",
+			"telephone": "+44-20-7123-4567",
+			"jobTitle": "CTO",
+			"company": "Global Corp",
+			"city": "London",
+			"country": "UK",
+			"priority": "High",
+			"tags": ["client", "enterprise", "international"],
+			"lastContact": { "start": "2025-09-20" },
+			"website": "https://globalcorp.com",
+			"linkedin": "https://linkedin.com/in/jameswilson",
+			"notes": "Enterprise client. Expanding to EMEA region. Discuss data residency requirements."
+		},
+		{
+			"@id": "contact:lisa-park",
+			"@type": "Person",
+			"name": "Lisa Park",
+			"email": "lisa@startupaccel.com",
+			"telephone": "+1-555-0321",
+			"jobTitle": "Founder & CEO",
+			"company": "Startup Accelerator",
+			"city": "Seattle",
+			"country": "USA",
+			"priority": "Medium",
+			"tags": ["investor", "startup", "networking"],
+			"lastContact": { "start": "2025-08-30" },
+			"website": "https://startupaccel.com",
+			"linkedin": "https://linkedin.com/in/lisapark",
+			"notes": "Potential investor. Interested in our growth metrics. Send Q3 report."
+		},
+		{
+			"@id": "contact:david-kumar",
+			"@type": "Person",
+			"name": "David Kumar",
+			"email": "d.kumar@cloudservices.net",
+			"telephone": "+1-555-0654",
+			"jobTitle": "Solutions Architect",
+			"company": "Cloud Services Inc",
+			"city": "Denver",
+			"country": "USA",
+			"priority": "Low",
+			"tags": ["vendor", "infrastructure", "cloud"],
+			"lastContact": { "start": "2025-07-15" },
+			"website": "https://cloudservices.net",
+			"linkedin": "https://linkedin.com/in/davidkumar",
+			"notes": "Infrastructure vendor. Annual contract renewal in Q1 2026."
+		}
+	]
+}

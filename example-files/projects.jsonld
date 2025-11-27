@@ -1,0 +1,107 @@
+{
+	"@context": {
+		"name": "https://schema.org/name",
+		"description": "https://schema.org/description",
+		"status": "https://example.com/vocab/status",
+		"owner": {
+			"@id": "https://schema.org/Person",
+			"@type": "@id"
+		},
+		"startDate": "https://schema.org/startDate",
+		"endDate": "https://schema.org/endDate",
+		"budget": "https://schema.org/budget"
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Projects",
+			"description": "Active and completed projects with timelines and ownership."
+		},
+		"properties": [
+			{
+				"id": "prop:name",
+				"key": "name",
+				"title": "Project Name",
+				"type": "title"
+			},
+			{
+				"id": "prop:description",
+				"key": "description",
+				"title": "Description",
+				"type": "rich_text"
+			},
+			{
+				"id": "prop:status",
+				"key": "status",
+				"title": "Status",
+				"type": "status",
+				"options": [
+					{ "id": "opt:planning", "name": "Planning" },
+					{ "id": "opt:active", "name": "Active" },
+					{ "id": "opt:on-hold", "name": "On Hold" },
+					{ "id": "opt:completed", "name": "Completed" },
+					{ "id": "opt:cancelled", "name": "Cancelled" }
+				]
+			},
+			{
+				"id": "prop:owner",
+				"key": "owner",
+				"title": "Project Owner",
+				"type": "relation"
+			},
+			{
+				"id": "prop:start-date",
+				"key": "startDate",
+				"title": "Start Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:end-date",
+				"key": "endDate",
+				"title": "Target End Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:budget",
+				"key": "budget",
+				"title": "Budget ($K)",
+				"type": "number"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "project:platform-redesign",
+			"@type": "Project",
+			"name": "Platform Redesign",
+			"description": "Complete redesign of the core platform UI/UX",
+			"status": "Active",
+			"owner": "person:alice",
+			"startDate": { "start": "2025-09-01" },
+			"endDate": { "start": "2025-12-31" },
+			"budget": 250
+		},
+		{
+			"@id": "project:api-v2",
+			"@type": "Project",
+			"name": "API v2.0",
+			"description": "Next generation REST API with GraphQL support",
+			"status": "Planning",
+			"owner": "person:bob",
+			"startDate": { "start": "2025-11-01" },
+			"endDate": { "start": "2026-03-31" },
+			"budget": 180
+		},
+		{
+			"@id": "project:mobile-app",
+			"@type": "Project",
+			"name": "Mobile App Launch",
+			"description": "iOS and Android native applications",
+			"status": "Active",
+			"owner": "person:david",
+			"startDate": { "start": "2025-08-15" },
+			"endDate": { "start": "2026-02-28" },
+			"budget": 400
+		}
+	]
+}

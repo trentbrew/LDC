@@ -1,0 +1,7 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id":"ex:v1",
+  "base": 1,
+  "v": {"@view":{"@expr":"base + 1", "@stable":true}}
+}
+

@@ -1,0 +1,307 @@
+{
+	"@context": {
+		"name": "https://schema.org/name",
+		"description": "https://schema.org/description",
+		"status": "https://example.com/vocab/status",
+		"priority": "https://example.com/vocab/priority",
+		"assignee": {
+			"@id": "https://schema.org/Person",
+			"@type": "@id"
+		},
+		"dependencies": {
+			"@id": "https://example.com/vocab/dependsOn",
+			"@type": "@id"
+		},
+		"tags": "https://schema.org/keywords",
+		"startDate": "https://schema.org/startDate",
+		"dueDate": "https://schema.org/endDate",
+		"completedDate": "https://schema.org/dateCompleted",
+		"estimate": "https://example.com/vocab/estimatedHours",
+		"actual": "https://example.com/vocab/actualHours",
+		"blocked": "https://example.com/vocab/isBlocked"
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Project Tracker",
+			"description": "Track tasks, dependencies, and team assignments for the current project sprint."
+		},
+		"properties": [
+			{
+				"id": "prop:name",
+				"key": "name",
+				"title": "Task Name",
+				"type": "title"
+			},
+			{
+				"id": "prop:description",
+				"key": "description",
+				"title": "Description",
+				"type": "rich_text"
+			},
+			{
+				"id": "prop:status",
+				"key": "status",
+				"title": "Status",
+				"type": "select",
+				"options": [
+					{ "id": "opt:backlog", "name": "Backlog" },
+					{ "id": "opt:todo", "name": "Todo" },
+					{ "id": "opt:in-progress", "name": "In Progress" },
+					{ "id": "opt:review", "name": "In Review" },
+					{ "id": "opt:done", "name": "Done" },
+					{ "id": "opt:blocked", "name": "Blocked" }
+				]
+			},
+			{
+				"id": "prop:priority",
+				"key": "priority",
+				"title": "Priority",
+				"type": "select",
+				"options": [
+					{ "id": "opt:critical", "name": "Critical" },
+					{ "id": "opt:high", "name": "High" },
+					{ "id": "opt:medium", "name": "Medium" },
+					{ "id": "opt:low", "name": "Low" }
+				]
+			},
+			{
+				"id": "prop:assignee",
+				"key": "assignee",
+				"title": "Assignee",
+				"type": "relation"
+			},
+			{
+				"id": "prop:dependencies",
+				"key": "dependencies",
+				"title": "Dependencies",
+				"type": "relation"
+			},
+			{
+				"id": "prop:tags",
+				"key": "tags",
+				"title": "Tags",
+				"type": "multi_select"
+			},
+			{
+				"id": "prop:start-date",
+				"key": "startDate",
+				"title": "Start Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:due-date",
+				"key": "dueDate",
+				"title": "Due Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:completed-date",
+				"key": "completedDate",
+				"title": "Completed",
+				"type": "date"
+			},
+			{
+				"id": "prop:estimate",
+				"key": "estimate",
+				"title": "Estimate (hrs)",
+				"type": "number"
+			},
+			{
+				"id": "prop:actual",
+				"key": "actual",
+				"title": "Actual (hrs)",
+				"type": "number"
+			},
+			{
+				"id": "prop:blocked",
+				"key": "blocked",
+				"title": "Blocked",
+				"type": "checkbox"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "task:001",
+			"@type": "Task",
+			"name": "Design system architecture",
+			"description": "Create high-level architecture diagrams and technical design documents",
+			"status": "Done",
+			"priority": "Critical",
+			"assignee": "person:alice",
+			"tags": ["architecture", "design", "documentation"],
+			"startDate": { "start": "2025-09-15" },
+			"dueDate": { "start": "2025-09-30" },
+			"completedDate": { "start": "2025-09-28" },
+			"estimate": 40,
+			"actual": 38,
+			"blocked": false
+		},
+		{
+			"@id": "task:002",
+			"@type": "Task",
+			"name": "Implement authentication system",
+			"description": "Build OAuth 2.0 + JWT authentication with refresh tokens",
+			"status": "Done",
+			"priority": "Critical",
+			"assignee": "person:bob",
+			"dependencies": ["task:001"],
+			"tags": ["backend", "security", "authentication"],
+			"startDate": { "start": "2025-10-01" },
+			"dueDate": { "start": "2025-10-15" },
+			"completedDate": { "start": "2025-10-12" },
+			"estimate": 60,
+			"actual": 58,
+			"blocked": false
+		},
+		{
+			"@id": "task:003",
+			"@type": "Task",
+			"name": "Create user dashboard UI",
+			"description": "Build responsive dashboard with charts and data tables",
+			"status": "In Progress",
+			"priority": "High",
+			"assignee": "person:alice",
+			"dependencies": ["task:002"],
+			"tags": ["frontend", "ui", "react"],
+			"startDate": { "start": "2025-10-08" },
+			"dueDate": { "start": "2025-10-25" },
+			"estimate": 80,
+			"actual": 32,
+			"blocked": false
+		},
+		{
+			"@id": "task:004",
+			"@type": "Task",
+			"name": "Set up CI/CD pipeline",
+			"description": "Configure GitHub Actions for automated testing and deployment",
+			"status": "In Review",
+			"priority": "High",
+			"assignee": "person:carol",
+			"dependencies": ["task:001"],
+			"tags": ["devops", "automation", "testing"],
+			"startDate": { "start": "2025-10-05" },
+			"dueDate": { "start": "2025-10-18" },
+			"estimate": 24,
+			"actual": 22,
+			"blocked": false
+		},
+		{
+			"@id": "task:005",
+			"@type": "Task",
+			"name": "Implement real-time notifications",
+			"description": "WebSocket-based notification system with push support",
+			"status": "Todo",
+			"priority": "Medium",
+			"assignee": "person:bob",
+			"dependencies": ["task:002", "task:003"],
+			"tags": ["backend", "websockets", "real-time"],
+			"startDate": { "start": "2025-10-20" },
+			"dueDate": { "start": "2025-11-05" },
+			"estimate": 50,
+			"blocked": false
+		},
+		{
+			"@id": "task:006",
+			"@type": "Task",
+			"name": "Add data export functionality",
+			"description": "Allow users to export data as CSV, JSON, and PDF",
+			"status": "Todo",
+			"priority": "Medium",
+			"assignee": "person:carol",
+			"dependencies": ["task:003"],
+			"tags": ["frontend", "export", "pdf"],
+			"startDate": { "start": "2025-10-28" },
+			"dueDate": { "start": "2025-11-10" },
+			"estimate": 30,
+			"blocked": false
+		},
+		{
+			"@id": "task:007",
+			"@type": "Task",
+			"name": "Implement search functionality",
+			"description": "Full-text search with filters and facets using Elasticsearch",
+			"status": "Blocked",
+			"priority": "High",
+			"assignee": "person:bob",
+			"dependencies": ["task:008"],
+			"tags": ["backend", "search", "elasticsearch"],
+			"startDate": { "start": "2025-10-15" },
+			"dueDate": { "start": "2025-11-01" },
+			"estimate": 45,
+			"blocked": true
+		},
+		{
+			"@id": "task:008",
+			"@type": "Task",
+			"name": "Deploy Elasticsearch cluster",
+			"description": "Set up and configure production Elasticsearch cluster",
+			"status": "Todo",
+			"priority": "Critical",
+			"assignee": "person:carol",
+			"tags": ["infrastructure", "elasticsearch", "devops"],
+			"startDate": { "start": "2025-10-12" },
+			"dueDate": { "start": "2025-10-20" },
+			"estimate": 20,
+			"blocked": false
+		},
+		{
+			"@id": "task:009",
+			"@type": "Task",
+			"name": "Mobile responsive optimization",
+			"description": "Ensure all UI components work seamlessly on mobile devices",
+			"status": "Backlog",
+			"priority": "Medium",
+			"assignee": "person:alice",
+			"dependencies": ["task:003"],
+			"tags": ["frontend", "mobile", "responsive"],
+			"dueDate": { "start": "2025-11-20" },
+			"estimate": 40,
+			"blocked": false
+		},
+		{
+			"@id": "task:010",
+			"@type": "Task",
+			"name": "Add internationalization (i18n)",
+			"description": "Support multiple languages with translation management",
+			"status": "Backlog",
+			"priority": "Low",
+			"tags": ["frontend", "i18n", "localization"],
+			"dueDate": { "start": "2025-12-01" },
+			"estimate": 35,
+			"blocked": false
+		},
+		{
+			"@id": "task:011",
+			"@type": "Task",
+			"name": "Performance optimization",
+			"description": "Profile and optimize frontend bundle size and load times",
+			"status": "Todo",
+			"priority": "High",
+			"assignee": "person:alice",
+			"dependencies": ["task:003"],
+			"tags": ["frontend", "performance", "optimization"],
+			"startDate": { "start": "2025-10-25" },
+			"dueDate": { "start": "2025-11-08" },
+			"estimate": 25,
+			"blocked": false
+		},
+		{
+			"@id": "task:012",
+			"@type": "Task",
+			"name": "Write API documentation",
+			"description": "Create comprehensive OpenAPI/Swagger documentation",
+			"status": "In Progress",
+			"priority": "Medium",
+			"assignee": "person:bob",
+			"dependencies": ["task:002"],
+			"tags": ["documentation", "api", "swagger"],
+			"startDate": { "start": "2025-10-10" },
+			"dueDate": { "start": "2025-10-22" },
+			"estimate": 15,
+			"actual": 8,
+			"blocked": false
+		}
+	]
+}

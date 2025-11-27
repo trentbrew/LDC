@@ -1,0 +1,10 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id":"ex:t1",
+  "events": [
+    {"ts":"2020-01-01","v":1},
+    {"ts":"2021-01-01","v":2}
+  ],
+  "asOf": {"@query": "?e a <ex:Event> . FILTER(ts <= now)"}
+}
+

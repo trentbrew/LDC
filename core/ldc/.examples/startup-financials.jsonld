@@ -1,0 +1,29 @@
+{
+  "@context": { "ex": "https://ex/" },
+  "@id": "ex:startup1",
+  "@units": {
+    "USD": {"kind":"currency"},
+    "kg": {"kind":"mass"}
+  },
+  "name": "Acme Robotics",
+  "parts": [
+    { "sku": "MOTOR-1", "qty": 2, "cost": "100 USD" },
+    { "sku": "FRAME-1", "qty": 1, "cost": "250 USD" }
+  ],
+  "bomTotal": {"@expr": "sum(parts.map(x => x.qty * x.cost))"},
+  "subscription": "49.99999 USD",
+  "monthlyBurn": {"@expr": "bomTotal + subscription"},
+  "orders": [
+    { "id": "o1", "qty": 1, "price": "1200 USD" },
+    { "id": "o2", "qty": 2, "price": "1150 USD" }
+  ],
+  "revenue": {"@query": {
+    "patterns": [
+      {"s": "?order", "p": "ex:qty", "o": "?q"},
+      {"s": "?order", "p": "ex:price", "o": "?p"}
+    ],
+    "select": [ {"total": {"agg": "sum", "expr": "?q * ?p"}} ]
+  }},
+  "profit": {"@view": {"@expr": "revenue - monthlyBurn", "@stable": true}},
+  "profitNonNegative": {"@constraint": "profit >= 0"}
+}

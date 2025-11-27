@@ -1,0 +1,9 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@units": {"kg":{"kind":"mass"}, "lb":{"kind":"mass","equals":"0.45359237 kg"}, "USD":{"kind":"currency"}},
+  "@id":"ex:item1",
+  "w": "2 lb",
+  "ppk": "10 USD/kg",
+  "price": {"@expr":"w * ppk"}
+}
+

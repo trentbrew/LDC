@@ -1,0 +1,18 @@
+{
+  "@context": { "ex": "https://ex/" },
+  "@id": "ex:inventory1",
+  "@units": { "USD": {"kind":"currency"} },
+  "items": [
+    { "sku": "A", "qty": 10, "cost": "5 USD" },
+    { "sku": "B", "qty": 5, "cost": "12 USD" },
+    { "sku": "C", "qty": 2, "cost": "100 USD" }
+  ],
+  "inventoryValue": {"@query": {
+    "patterns": [
+      {"s":"?line","p":"ex:qty","o":"?q"},
+      {"s":"?line","p":"ex:cost","o":"?c"}
+    ],
+    "select": [ {"total": {"agg":"sum","expr":"?q * ?c"}} ]
+  }}
+}
+

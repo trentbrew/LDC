@@ -1,0 +1,37 @@
+{
+  "name": "ldc-mcp-server",
+  "module": "src/index.ts",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "LD-C MCP + REST Server - Unified evaluation service",
+  "private": true,
+  "scripts": {
+    "dev": "MODE=both bun --watch src/index.ts",
+    "dev:mcp": "MODE=mcp bun --watch src/index.ts",
+    "dev:http": "MODE=http bun --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "start:mcp": "MODE=mcp bun run src/index.ts",
+    "start:http": "MODE=http bun run src/index.ts",
+    "start:both": "MODE=both bun run src/index.ts",
+    "build": "bun build src/index.ts --outdir build --target node",
+    "test": "bun run test-parity.ts",
+    "test:strict": "bun run test-parity-strict.ts",
+    "test:prod": "bun run test-production-ready.ts",
+    "test:golden": "bun run test-golden.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/cors": "^2.8.17",
+    "@types/node": "^20.11.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.8.2",
+    "@valibot/to-json-schema": "^1.0.0",
+    "effect": "^3.14.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "fastmcp": "^3.19.2",
+    "zod": "^3.24.2"
+  }
+}

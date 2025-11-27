@@ -1,0 +1,297 @@
+{
+	"@context": {
+		"ex": "https://ex/"
+	},
+	"@id": "ex:sensorCollection1",
+	"sensors": [
+		{
+			"@id": "ex:sensor-temp-1",
+			"label": "Greenhouse Temperature Sensor",
+			"readings": [
+				{
+					"ts": "2024-01-01",
+					"tempC": 20,
+					"humidity": 40
+				},
+				{
+					"ts": "2024-01-02",
+					"tempC": 21,
+					"humidity": 42
+				},
+				{
+					"ts": "2024-01-03",
+					"tempC": 22,
+					"humidity": 45
+				},
+				{
+					"ts": "2024-01-04",
+					"tempC": 23,
+					"humidity": 43
+				},
+				{
+					"ts": "2024-01-05",
+					"tempC": 21,
+					"humidity": 41
+				},
+				{
+					"ts": "2024-01-06",
+					"tempC": 19,
+					"humidity": 44
+				},
+				{
+					"ts": "2024-01-07",
+					"tempC": 18,
+					"humidity": 46
+				}
+			],
+			"avgTemp": {
+				"@expr": "avg(readings.map(x => x.tempC))"
+			},
+			"high": {
+				"@expr": "max(readings.map(x => x.tempC))"
+			}
+		},
+		{
+			"@id": "ex:sensor-temp-2",
+			"label": "Warehouse Ambient Sensor",
+			"readings": [
+				{
+					"ts": "2024-01-01",
+					"tempC": 16,
+					"humidity": 50
+				},
+				{
+					"ts": "2024-01-02",
+					"tempC": 17,
+					"humidity": 48
+				},
+				{
+					"ts": "2024-01-03",
+					"tempC": 18,
+					"humidity": 47
+				},
+				{
+					"ts": "2024-01-04",
+					"tempC": 19,
+					"humidity": 49
+				},
+				{
+					"ts": "2024-01-05",
+					"tempC": 17,
+					"humidity": 51
+				},
+				{
+					"ts": "2024-01-06",
+					"tempC": 16,
+					"humidity": 53
+				},
+				{
+					"ts": "2024-01-07",
+					"tempC": 15,
+					"humidity": 52
+				}
+			],
+			"avgTemp": {
+				"@expr": "avg(readings.map(x => x.tempC))"
+			},
+			"high": {
+				"@expr": "max(readings.map(x => x.tempC))"
+			}
+		},
+		{
+			"@id": "ex:sensor-outdoor-1",
+			"label": "Outdoor Weather Station",
+			"readings": [
+				{
+					"ts": "2024-01-01",
+					"tempC": 5,
+					"humidity": 70,
+					"windKph": 12
+				},
+				{
+					"ts": "2024-01-02",
+					"tempC": 4,
+					"humidity": 72,
+					"windKph": 15
+				},
+				{
+					"ts": "2024-01-03",
+					"tempC": 7,
+					"humidity": 68,
+					"windKph": 10
+				},
+				{
+					"ts": "2024-01-04",
+					"tempC": 6,
+					"humidity": 65,
+					"windKph": 9
+				},
+				{
+					"ts": "2024-01-05",
+					"tempC": 8,
+					"humidity": 63,
+					"windKph": 11
+				},
+				{
+					"ts": "2024-01-06",
+					"tempC": 5,
+					"humidity": 66,
+					"windKph": 13
+				},
+				{
+					"ts": "2024-01-07",
+					"tempC": 3,
+					"humidity": 74,
+					"windKph": 16
+				}
+			],
+			"avgTemp": {
+				"@expr": "avg(readings.map(x => x.tempC))"
+			},
+			"high": {
+				"@expr": "max(readings.map(x => x.tempC))"
+			}
+		},
+		{
+			"@id": "ex:sensor-pressure-1",
+			"label": "Manufacturing Pressure Sensor",
+			"readings": [
+				{
+					"ts": "2024-01-01",
+					"pressureKpa": 101.3,
+					"tempC": 22
+				},
+				{
+					"ts": "2024-01-02",
+					"pressureKpa": 101.5,
+					"tempC": 23
+				},
+				{
+					"ts": "2024-01-03",
+					"pressureKpa": 101.2,
+					"tempC": 21
+				},
+				{
+					"ts": "2024-01-04",
+					"pressureKpa": 101.4,
+					"tempC": 24
+				},
+				{
+					"ts": "2024-01-05",
+					"pressureKpa": 101.1,
+					"tempC": 20
+				},
+				{
+					"ts": "2024-01-06",
+					"pressureKpa": 101.6,
+					"tempC": 25
+				},
+				{
+					"ts": "2024-01-07",
+					"pressureKpa": 101,
+					"tempC": 19
+				}
+			],
+			"avgTemp": {
+				"@expr": "avg(readings.map(x => x.tempC))"
+			},
+			"high": {
+				"@expr": "max(readings.map(x => x.tempC))"
+			}
+		},
+		{
+			"@id": "ex:sensor-light-1",
+			"label": "Office Light Level Sensor",
+			"readings": [
+				{
+					"ts": "2024-01-01",
+					"lux": 450,
+					"tempC": 21
+				},
+				{
+					"ts": "2024-01-02",
+					"lux": 480,
+					"tempC": 22
+				},
+				{
+					"ts": "2024-01-03",
+					"lux": 420,
+					"tempC": 20
+				},
+				{
+					"ts": "2024-01-04",
+					"lux": 500,
+					"tempC": 23
+				},
+				{
+					"ts": "2024-01-05",
+					"lux": 460,
+					"tempC": 21
+				},
+				{
+					"ts": "2024-01-06",
+					"lux": 440,
+					"tempC": 20
+				},
+				{
+					"ts": "2024-01-07",
+					"lux": 490,
+					"tempC": 22
+				}
+			],
+			"avgTemp": {
+				"@expr": "avg(readings.map(x => x.tempC))"
+			},
+			"high": {
+				"@expr": "max(readings.map(x => x.tempC))"
+			}
+		},
+		{
+			"@id": "ex:sensor-soil-1",
+			"label": "Garden Soil Moisture Sensor",
+			"readings": [
+				{
+					"ts": "2024-01-01",
+					"moisturePercent": 65,
+					"tempC": 15
+				},
+				{
+					"ts": "2024-01-02",
+					"moisturePercent": 70,
+					"tempC": 16
+				},
+				{
+					"ts": "2024-01-03",
+					"moisturePercent": 60,
+					"tempC": 14
+				},
+				{
+					"ts": "2024-01-04",
+					"moisturePercent": 75,
+					"tempC": 17
+				},
+				{
+					"ts": "2024-01-05",
+					"moisturePercent": 68,
+					"tempC": 15
+				},
+				{
+					"ts": "2024-01-06",
+					"moisturePercent": 72,
+					"tempC": 16
+				},
+				{
+					"ts": "2024-01-07",
+					"moisturePercent": 58,
+					"tempC": 14
+				}
+			],
+			"avgTemp": {
+				"@expr": "avg(readings.map(x => x.tempC))"
+			},
+			"high": {
+				"@expr": "max(readings.map(x => x.tempC))"
+			}
+		}
+	]
+}

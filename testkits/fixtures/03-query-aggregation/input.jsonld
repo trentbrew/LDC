@@ -1,0 +1,9 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id": "ex:order1",
+  "lines": [
+    {"sku":"A","qty":2,"price":5},
+    {"sku":"B","qty":1,"price":12}
+  ],
+  "total": {"@expr":"sum(lines.map(x => x.qty * x.price))"}
+}

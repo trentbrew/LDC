@@ -1,0 +1,31 @@
+{
+  "@context": {
+    "ex": "https://example.com/tasks/"
+  },
+  "@id": "ex:sprint-42",
+  "@type": "Sprint",
+
+  "items": [
+    { "id": "t1", "title": "Setup project", "done": true, "points": 3 },
+    { "id": "t2", "title": "Design API", "done": true, "points": 5 },
+    { "id": "t3", "title": "Implement auth", "done": false, "points": 8 },
+    { "id": "t4", "title": "Write tests", "done": false, "points": 5 },
+    { "id": "t5", "title": "Deploy", "done": false, "points": 3 }
+  ],
+
+  "totalPoints": {
+    "@expr": "items.map(i => i.points).reduce((a, b) => a + b, 0)"
+  },
+
+  "completedPoints": {
+    "@expr": "items.filter(i => i.done).map(i => i.points).reduce((a, b) => a + b, 0)"
+  },
+
+  "progress": {
+    "@expr": "completedPoints / totalPoints * 100"
+  },
+
+  "remainingTasks": {
+    "@expr": "items.filter(i => !i.done).length"
+  }
+}

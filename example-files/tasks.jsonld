@@ -1,0 +1,215 @@
+{
+	"@context": {
+		"name": "https://schema.org/name",
+		"description": "https://schema.org/description",
+		"status": "https://example.com/vocab/status",
+		"priority": "https://example.com/vocab/priority",
+		"assignee": {
+			"@id": "https://schema.org/Person",
+			"@type": "@id"
+		},
+		"project": {
+			"@id": "https://example.com/vocab/project",
+			"@type": "@id"
+		},
+		"dependencies": {
+			"@id": "https://example.com/vocab/dependsOn",
+			"@type": "@id"
+		},
+		"tags": "https://schema.org/keywords",
+		"startDate": "https://schema.org/startDate",
+		"dueDate": "https://schema.org/endDate",
+		"estimate": "https://example.com/vocab/estimatedHours"
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Tasks",
+			"description": "Work items with assignments, dependencies, and project relationships."
+		},
+		"properties": [
+			{
+				"id": "prop:name",
+				"key": "name",
+				"title": "Task Name",
+				"type": "title"
+			},
+			{
+				"id": "prop:description",
+				"key": "description",
+				"title": "Description",
+				"type": "rich_text"
+			},
+			{
+				"id": "prop:status",
+				"key": "status",
+				"title": "Status",
+				"type": "select",
+				"options": [
+					{ "id": "opt:backlog", "name": "Backlog" },
+					{ "id": "opt:todo", "name": "Todo" },
+					{ "id": "opt:in-progress", "name": "In Progress" },
+					{ "id": "opt:review", "name": "In Review" },
+					{ "id": "opt:done", "name": "Done" }
+				]
+			},
+			{
+				"id": "prop:priority",
+				"key": "priority",
+				"title": "Priority",
+				"type": "select",
+				"options": [
+					{ "id": "opt:critical", "name": "Critical" },
+					{ "id": "opt:high", "name": "High" },
+					{ "id": "opt:medium", "name": "Medium" },
+					{ "id": "opt:low", "name": "Low" }
+				]
+			},
+			{
+				"id": "prop:assignee",
+				"key": "assignee",
+				"title": "Assignee",
+				"type": "relation"
+			},
+			{
+				"id": "prop:project",
+				"key": "project",
+				"title": "Project",
+				"type": "relation"
+			},
+			{
+				"id": "prop:dependencies",
+				"key": "dependencies",
+				"title": "Dependencies",
+				"type": "relation"
+			},
+			{
+				"id": "prop:tags",
+				"key": "tags",
+				"title": "Tags",
+				"type": "multi_select"
+			},
+			{
+				"id": "prop:start-date",
+				"key": "startDate",
+				"title": "Start Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:due-date",
+				"key": "dueDate",
+				"title": "Due Date",
+				"type": "date"
+			},
+			{
+				"id": "prop:estimate",
+				"key": "estimate",
+				"title": "Estimate (hrs)",
+				"type": "number"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "task:redesign-001",
+			"@type": "Task",
+			"name": "Design new component library",
+			"description": "Create reusable component system for the redesign",
+			"status": "In Progress",
+			"priority": "Critical",
+			"assignee": "person:emma",
+			"project": "project:platform-redesign",
+			"tags": ["design", "components", "ui"],
+			"startDate": { "start": "2025-09-15" },
+			"dueDate": { "start": "2025-10-31" },
+			"estimate": 120
+		},
+		{
+			"@id": "task:redesign-002",
+			"@type": "Task",
+			"name": "Implement design system",
+			"description": "Build React components from design specs",
+			"status": "Todo",
+			"priority": "Critical",
+			"assignee": "person:alice",
+			"project": "project:platform-redesign",
+			"dependencies": ["task:redesign-001"],
+			"tags": ["frontend", "react", "components"],
+			"startDate": { "start": "2025-11-01" },
+			"dueDate": { "start": "2025-11-30" },
+			"estimate": 160
+		},
+		{
+			"@id": "task:api-001",
+			"@type": "Task",
+			"name": "Design API schema",
+			"description": "Define GraphQL schema and REST endpoints",
+			"status": "In Progress",
+			"priority": "High",
+			"assignee": "person:bob",
+			"project": "project:api-v2",
+			"tags": ["backend", "api", "graphql"],
+			"startDate": { "start": "2025-10-15" },
+			"dueDate": { "start": "2025-11-15" },
+			"estimate": 80
+		},
+		{
+			"@id": "task:api-002",
+			"@type": "Task",
+			"name": "Set up GraphQL server",
+			"description": "Configure Apollo Server with authentication",
+			"status": "Todo",
+			"priority": "High",
+			"assignee": "person:bob",
+			"project": "project:api-v2",
+			"dependencies": ["task:api-001"],
+			"tags": ["backend", "graphql", "infrastructure"],
+			"startDate": { "start": "2025-11-16" },
+			"dueDate": { "start": "2025-12-15" },
+			"estimate": 60
+		},
+		{
+			"@id": "task:mobile-001",
+			"@type": "Task",
+			"name": "iOS app foundation",
+			"description": "Set up React Native project and navigation",
+			"status": "In Progress",
+			"priority": "Critical",
+			"assignee": "person:carol",
+			"project": "project:mobile-app",
+			"tags": ["mobile", "ios", "react-native"],
+			"startDate": { "start": "2025-09-01" },
+			"dueDate": { "start": "2025-10-15" },
+			"estimate": 100
+		},
+		{
+			"@id": "task:mobile-002",
+			"@type": "Task",
+			"name": "Android app foundation",
+			"description": "Set up React Native project and navigation",
+			"status": "In Progress",
+			"priority": "Critical",
+			"assignee": "person:carol",
+			"project": "project:mobile-app",
+			"tags": ["mobile", "android", "react-native"],
+			"startDate": { "start": "2025-09-01" },
+			"dueDate": { "start": "2025-10-15" },
+			"estimate": 100
+		},
+		{
+			"@id": "task:mobile-003",
+			"@type": "Task",
+			"name": "Implement authentication flow",
+			"description": "OAuth login with biometric support",
+			"status": "Todo",
+			"priority": "High",
+			"assignee": "person:carol",
+			"project": "project:mobile-app",
+			"dependencies": ["task:mobile-001", "task:mobile-002"],
+			"tags": ["mobile", "security", "authentication"],
+			"startDate": { "start": "2025-10-16" },
+			"dueDate": { "start": "2025-11-15" },
+			"estimate": 80
+		}
+	]
+}

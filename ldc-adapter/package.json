@@ -1,0 +1,67 @@
+{
+  "name": "@ldc/adapter",
+  "version": "0.1.0",
+  "description": "Thin adapter layer for LD-C computation over various backends",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./instantdb": {
+      "types": "./dist/instantdb.d.ts",
+      "import": "./dist/instantdb.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "ldc",
+    "linked-data",
+    "adapter",
+    "instantdb",
+    "provenance"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@ldc/datatable-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^1.0.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.0"
+  },
+  "peerDependencies": {
+    "@instantdb/core": "^0.12.0"
+  },
+  "peerDependenciesMeta": {
+    "@instantdb/core": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

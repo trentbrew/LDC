@@ -1,0 +1,30 @@
+{
+  "@context": {
+    "ex": "https://example.com/budget/"
+  },
+  "@id": "ex:monthly-budget",
+  "@type": "Budget",
+
+  "income": 5000,
+  "rent": 1500,
+  "utilities": 200,
+  "groceries": 400,
+  "transport": 150,
+  "entertainment": 200,
+
+  "totalExpenses": {
+    "@expr": "rent + utilities + groceries + transport + entertainment"
+  },
+
+  "savings": {
+    "@expr": "income - totalExpenses"
+  },
+
+  "savingsRate": {
+    "@expr": "savings / income * 100"
+  },
+
+  "isHealthy": {
+    "@constraint": "savingsRate >= 20"
+  }
+}

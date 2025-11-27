@@ -1,0 +1,220 @@
+{
+	"@context": {
+		"name": "https://schema.org/name",
+		"description": "https://schema.org/description",
+		"sku": "https://schema.org/sku",
+		"price": "https://schema.org/price",
+		"category": "https://schema.org/category",
+		"brand": "https://schema.org/brand",
+		"inStock": "https://schema.org/availability",
+		"stockQuantity": "https://example.com/vocab/stockQuantity",
+		"rating": "https://schema.org/ratingValue",
+		"reviews": "https://schema.org/reviewCount",
+		"tags": "https://schema.org/keywords"
+	},
+	"@units": {
+		"USD": { "kind": "currency" }
+	},
+	"ldc:schema": {
+		"version": 1,
+		"metadata": {
+			"title": "Products",
+			"description": "E-commerce product catalog with pricing and inventory."
+		},
+		"properties": [
+			{
+				"id": "prop:name",
+				"key": "name",
+				"title": "Product Name",
+				"type": "title"
+			},
+			{
+				"id": "prop:sku",
+				"key": "sku",
+				"title": "SKU",
+				"type": "text"
+			},
+			{
+				"id": "prop:description",
+				"key": "description",
+				"title": "Description",
+				"type": "rich_text"
+			},
+			{
+				"id": "prop:category",
+				"key": "category",
+				"title": "Category",
+				"type": "select",
+				"options": [
+					{ "id": "opt:electronics", "name": "Electronics" },
+					{ "id": "opt:clothing", "name": "Clothing" },
+					{ "id": "opt:home", "name": "Home & Garden" },
+					{ "id": "opt:sports", "name": "Sports" },
+					{ "id": "opt:books", "name": "Books" }
+				]
+			},
+			{
+				"id": "prop:brand",
+				"key": "brand",
+				"title": "Brand",
+				"type": "text"
+			},
+			{
+				"id": "prop:price",
+				"key": "price",
+				"title": "Price",
+				"type": "number"
+			},
+			{
+				"id": "prop:in-stock",
+				"key": "inStock",
+				"title": "In Stock",
+				"type": "checkbox"
+			},
+			{
+				"id": "prop:stock-quantity",
+				"key": "stockQuantity",
+				"title": "Stock Qty",
+				"type": "number"
+			},
+			{
+				"id": "prop:rating",
+				"key": "rating",
+				"title": "Rating",
+				"type": "number"
+			},
+			{
+				"id": "prop:reviews",
+				"key": "reviews",
+				"title": "Reviews",
+				"type": "number"
+			},
+			{
+				"id": "prop:tags",
+				"key": "tags",
+				"title": "Tags",
+				"type": "multi_select"
+			},
+			{
+				"id": "prop:inventory-value",
+				"key": "inventoryValue",
+				"title": "Inventory Value",
+				"type": "formula"
+			}
+		]
+	},
+	"@graph": [
+		{
+			"@id": "product:laptop-pro",
+			"@type": "Product",
+			"name": "UltraBook Pro 15",
+			"sku": "LAPTOP-PRO-15",
+			"description": "High-performance laptop with 16GB RAM and 512GB SSD",
+			"category": "Electronics",
+			"brand": "TechCorp",
+			"price": "1299 USD",
+			"inStock": true,
+			"stockQuantity": 45,
+			"rating": 4.7,
+			"reviews": 328,
+			"tags": ["laptop", "computer", "portable", "business"],
+			"inventoryValue": { "@expr": "stockQuantity * price" }
+		},
+		{
+			"@id": "product:wireless-mouse",
+			"@type": "Product",
+			"name": "Wireless Ergonomic Mouse",
+			"sku": "MOUSE-WL-ERG",
+			"description": "Comfortable wireless mouse with precision tracking",
+			"category": "Electronics",
+			"brand": "PeripheralCo",
+			"price": "49 USD",
+			"inStock": true,
+			"stockQuantity": 230,
+			"rating": 4.5,
+			"reviews": 892,
+			"tags": ["mouse", "wireless", "ergonomic", "accessory"],
+			"inventoryValue": { "@expr": "stockQuantity * price" }
+		},
+		{
+			"@id": "product:running-shoes",
+			"@type": "Product",
+			"name": "CloudRunner Pro Shoes",
+			"sku": "SHOES-RUN-PRO",
+			"description": "Lightweight running shoes with advanced cushioning",
+			"category": "Sports",
+			"brand": "AthleteGear",
+			"price": "129 USD",
+			"inStock": true,
+			"stockQuantity": 87,
+			"rating": 4.8,
+			"reviews": 1543,
+			"tags": ["shoes", "running", "athletic", "footwear"],
+			"inventoryValue": { "@expr": "stockQuantity * price" }
+		},
+		{
+			"@id": "product:coffee-maker",
+			"@type": "Product",
+			"name": "Smart Coffee Maker",
+			"sku": "COFFEE-SMART-01",
+			"description": "Programmable coffee maker with app control",
+			"category": "Home & Garden",
+			"brand": "HomeBrews",
+			"price": "89 USD",
+			"inStock": true,
+			"stockQuantity": 62,
+			"rating": 4.3,
+			"reviews": 456,
+			"tags": ["coffee", "kitchen", "smart", "appliance"],
+			"inventoryValue": { "@expr": "stockQuantity * price" }
+		},
+		{
+			"@id": "product:yoga-mat",
+			"@type": "Product",
+			"name": "Premium Yoga Mat",
+			"sku": "YOGA-MAT-PREM",
+			"description": "Non-slip yoga mat with extra cushioning",
+			"category": "Sports",
+			"brand": "ZenFit",
+			"price": "39 USD",
+			"inStock": true,
+			"stockQuantity": 145,
+			"rating": 4.6,
+			"reviews": 678,
+			"tags": ["yoga", "fitness", "mat", "exercise"],
+			"inventoryValue": { "@expr": "stockQuantity * price" }
+		},
+		{
+			"@id": "product:desk-lamp",
+			"@type": "Product",
+			"name": "LED Desk Lamp",
+			"sku": "LAMP-DESK-LED",
+			"description": "Adjustable LED lamp with USB charging port",
+			"category": "Home & Garden",
+			"brand": "BrightSpace",
+			"price": "45 USD",
+			"inStock": false,
+			"stockQuantity": 0,
+			"rating": 4.4,
+			"reviews": 234,
+			"tags": ["lamp", "lighting", "desk", "led"],
+			"inventoryValue": { "@expr": "stockQuantity * price" }
+		},
+		{
+			"@id": "product:cookbook",
+			"@type": "Product",
+			"name": "The Complete Chef's Guide",
+			"sku": "BOOK-COOK-CHEF",
+			"description": "Comprehensive cookbook with 500+ recipes",
+			"category": "Books",
+			"brand": "Culinary Press",
+			"price": "35 USD",
+			"inStock": true,
+			"stockQuantity": 78,
+			"rating": 4.9,
+			"reviews": 1205,
+			"tags": ["book", "cooking", "recipes", "reference"],
+			"inventoryValue": { "@expr": "stockQuantity * price" }
+		}
+	]
+}

@@ -1,0 +1,7 @@
+{
+  "@context": {"ex":"https://ex/"},
+  "@id": "ex:graph1",
+  "a": {"@expr":"b ?? 1"},
+  "b": {"@expr":"a ?? 1"}
+}
+
