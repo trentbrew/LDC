@@ -9,7 +9,7 @@
  */
 
 import { readFileSync, watchFile } from 'node:fs';
-import { resolve } from 'node:path';
+import { resolve, dirname } from 'node:path';
 import { Evaluator } from './core/runtime/src/core/evaluator';
 import type {
   QuadStore,
@@ -103,12 +103,226 @@ interface EvalResult {
   durationMs: number;
 }
 
+// Parse rollup shorthand: "relation.property.select:aggregate"
+function parseRollupShorthand(shorthand: string): {
+  relation: string;
+  property: string;
+  select?: string;
+  aggregate: string;
+} {
+  const [path, aggregate] = shorthand.split(':');
+  const parts = path.split('.');
+
+  if (parts.length === 2) {
+    // "relation.property:aggregate" (no select, e.g., count)
+    return { relation: parts[0], property: parts[1], aggregate };
+  } else if (parts.length >= 3) {
+    // "relation.property.select:aggregate"
+    return {
+      relation: parts[0],
+      property: parts[1],
+      select: parts.slice(2).join('.'),
+      aggregate,
+    };
+  }
+  throw new Error(`Invalid rollup shorthand: ${shorthand}`);
+}
+
+// Aggregation functions
+const aggregators: Record<string, (values: any[]) => any> = {
+  sum: (vals) => vals.reduce((a, b) => a + (Number(b) || 0), 0),
+  avg: (vals) =>
+    vals.length
+      ? vals.reduce((a, b) => a + (Number(b) || 0), 0) / vals.length
+      : 0,
+  count: (vals) => vals.length,
+  min: (vals) => Math.min(...vals.map(Number).filter((n) => !isNaN(n))),
+  max: (vals) => Math.max(...vals.map(Number).filter((n) => !isNaN(n))),
+  first: (vals) => vals[0],
+  last: (vals) => vals[vals.length - 1],
+  concat: (vals) => vals.join(', '),
+  unique: (vals) => [...new Set(vals)],
+  all: (vals) => vals,
+};
+
+// Load and cache related files
+function loadRelations(
+  relations: Record<string, string>,
+  baseDir: string,
+): Record<string, any> {
+  const loaded: Record<string, any> = {};
+  for (const [alias, relPath] of Object.entries(relations)) {
+    const fullPath = resolve(baseDir, relPath);
+    const content = readFileSync(fullPath, 'utf8');
+    loaded[alias] = JSON.parse(content);
+  }
+  return loaded;
+}
+
+// Resolve a path like "relation.property.nested[0].field"
+function resolvePath(path: string, relations: Record<string, any>): any {
+  // Parse path: "relation.path.to.value" or "relation.items[0].name"
+  const parts = path.split('.');
+  const relationName = parts[0];
+
+  const relatedDoc = relations[relationName];
+  if (!relatedDoc) {
+    throw new Error(`Relation "${relationName}" not found`);
+  }
+
+  let current: any = relatedDoc;
+  for (let i = 1; i < parts.length; i++) {
+    const part = parts[i];
+
+    // Check for array index: "items[0]" or just "items"
+    const indexMatch = part.match(/^(\w+)\[(\d+)\]$/);
+    if (indexMatch) {
+      const [, prop, idx] = indexMatch;
+      current = current?.[prop]?.[Number(idx)];
+    } else {
+      current = current?.[part];
+    }
+
+    if (current === undefined) {
+      return undefined;
+    }
+  }
+
+  return current;
+}
+
+// Process @ref properties (simple lookups)
+function processRefs(
+  doc: any,
+  relations: Record<string, any>,
+): Record<string, any> {
+  const computed: Record<string, any> = {};
+
+  for (const [key, value] of Object.entries(doc)) {
+    if (value && typeof value === 'object' && '@ref' in value) {
+      const refPath = (value as any)['@ref'] as string;
+      computed[key] = resolvePath(refPath, relations);
+    }
+  }
+
+  return computed;
+}
+
+// Process @rollup properties
+function processRollups(
+  doc: any,
+  relations: Record<string, any>,
+): Record<string, any> {
+  const computed: Record<string, any> = {};
+
+  for (const [key, value] of Object.entries(doc)) {
+    if (value && typeof value === 'object' && '@rollup' in value) {
+      const rollupDef = (value as any)['@rollup'];
+
+      let config: {
+        relation: string;
+        property: string;
+        select?: string;
+        aggregate: string;
+        filter?: string;
+      };
+
+      if (typeof rollupDef === 'string') {
+        config = parseRollupShorthand(rollupDef);
+      } else {
+        config = rollupDef;
+      }
+
+      // Get the related data
+      const relatedDoc = relations[config.relation];
+      if (!relatedDoc) {
+        throw new Error(`Relation "${config.relation}" not found`);
+      }
+
+      // Get the property (array of items)
+      let items = relatedDoc[config.property];
+      if (!Array.isArray(items)) {
+        throw new Error(`Property "${config.property}" is not an array`);
+      }
+
+      // Apply filter if specified
+      if (config.filter) {
+        // Simple filter evaluation (for MVP, just support basic comparisons)
+        items = items.filter((item: any) => {
+          // Parse simple filter like "status == 'active'" (match multi-char ops first)
+          const match = config.filter!.match(
+            /(\w+)\s*(==|!=|>=|<=|>|<)\s*['"]?([^'"]+)['"]?/,
+          );
+          if (match) {
+            const [, prop, op, val] = match;
+            const itemVal = item[prop];
+            switch (op) {
+              case '==':
+                return String(itemVal) === val;
+              case '!=':
+                return String(itemVal) !== val;
+              case '>':
+                return Number(itemVal) > Number(val);
+              case '<':
+                return Number(itemVal) < Number(val);
+              case '>=':
+                return Number(itemVal) >= Number(val);
+              case '<=':
+                return Number(itemVal) <= Number(val);
+            }
+          }
+          return true;
+        });
+      }
+
+      // Extract values to aggregate
+      let values: any[];
+      if (config.select) {
+        values = items.map((item: any) => item[config.select!]);
+      } else {
+        values = items;
+      }
+
+      // Apply aggregation
+      const aggregator = aggregators[config.aggregate];
+      if (!aggregator) {
+        throw new Error(`Unknown aggregation: ${config.aggregate}`);
+      }
+
+      computed[key] = aggregator(values);
+    }
+  }
+
+  return computed;
+}
+
 async function evalDataFile(filePath: string): Promise<EvalResult> {
   const t0 = performance.now();
+  const baseDir = dirname(filePath);
 
   // Read and parse file
   const content = readFileSync(filePath, 'utf8');
   const doc = JSON.parse(content);
+
+  // Load relations if present
+  const relations = doc['@relations']
+    ? loadRelations(doc['@relations'], baseDir)
+    : {};
+
+  // Process @ref lookups
+  const refValues = processRefs(doc, relations);
+
+  // Process @rollup aggregations
+  const rollupValues = processRollups(doc, relations);
+
+  // Create a modified doc with ref and rollup values as plain properties
+  const processedDoc = { ...doc };
+  for (const [key, value] of Object.entries(refValues)) {
+    processedDoc[key] = value;
+  }
+  for (const [key, value] of Object.entries(rollupValues)) {
+    processedDoc[key] = value;
+  }
 
   // Create evaluator with fresh context
   const quads = new SimpleQuadStore();
@@ -120,11 +334,19 @@ async function evalDataFile(filePath: string): Promise<EvalResult> {
   }));
 
   // Evaluate document
-  const { graph, diagnostics } = await evaluator.evalDocument(doc);
+  const { graph, diagnostics } = await evaluator.evalDocument(processedDoc);
 
   // Extract computed values from quads
   const subject = expandIri(doc['@id'] ?? '', doc['@context'] ?? {});
   const output: Record<string, any> = { '@id': subject };
+
+  // Include ref and rollup values in output
+  for (const [key, value] of Object.entries(refValues)) {
+    output[key] = value;
+  }
+  for (const [key, value] of Object.entries(rollupValues)) {
+    output[key] = value;
+  }
 
   for (const q of quads.match(subject)) {
     output[q.p] = parseValue(q.o);

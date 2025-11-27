@@ -1,0 +1,53 @@
+{
+  "@context": { "ex": "https://example.com/" },
+  "@id": "ex:dashboard",
+
+  "@relations": {
+    "projects": "./projects.data",
+    "team": "./team.data"
+  },
+
+  "totalBudget": { "@rollup": "projects.items.budget:sum" },
+  "projectCount": { "@rollup": "projects.items:count" },
+  "avgBudget": { "@rollup": "projects.items.budget:avg" },
+  "totalHours": { "@rollup": "projects.items.hours:sum" },
+
+  "activeBudget": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'active'",
+      "select": "budget",
+      "aggregate": "sum"
+    }
+  },
+
+  "activeProjects": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'active'",
+      "aggregate": "count"
+    }
+  },
+
+  "teamSize": { "@rollup": "team.members:count" },
+  "avgRate": { "@rollup": "team.members.rate:avg" },
+  "teamNames": { "@rollup": "team.members.name:concat" },
+  "developerCount": {
+    "@rollup": {
+      "relation": "team",
+      "property": "members",
+      "filter": "role == 'developer'",
+      "aggregate": "count"
+    }
+  },
+
+  "estimatedLaborCost": { "@expr": "totalHours * avgRate" },
+  "profitMargin": { "@expr": "totalBudget - estimatedLaborCost" },
+  "activeMargin": { "@expr": "activeBudget - estimatedLaborCost" },
+
+  "summary": {
+    "@expr": "projectCount + ' projects (' + activeProjects + ' active), $' + totalBudget + ' budget, ' + teamSize + ' team members'"
+  }
+}

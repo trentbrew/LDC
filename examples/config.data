@@ -1,0 +1,27 @@
+{
+  "@context": { "cfg": "https://config.example/" },
+  "@id": "cfg:app-config",
+
+  "appName": "Project Dashboard",
+  "version": "1.0.0",
+
+  "theme": {
+    "colors": {
+      "primary": "#3B82F6",
+      "secondary": "#10B981",
+      "danger": "#EF4444"
+    },
+    "darkMode": true
+  },
+
+  "limits": {
+    "maxProjects": 100,
+    "maxTeamSize": 50
+  },
+
+  "features": {
+    "rollups": true,
+    "refs": true,
+    "queries": false
+  }
+}

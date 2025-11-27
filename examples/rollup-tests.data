@@ -1,0 +1,62 @@
+{
+  "@context": { "test": "https://test.example/" },
+  "@id": "test:rollup-tests",
+
+  "@relations": {
+    "projects": "./projects.data",
+    "team": "./team.data"
+  },
+
+  "test1_sum": { "@rollup": "projects.items.budget:sum" },
+  "test2_avg": { "@rollup": "projects.items.budget:avg" },
+  "test3_count": { "@rollup": "projects.items:count" },
+  "test4_min": { "@rollup": "projects.items.budget:min" },
+  "test5_max": { "@rollup": "projects.items.budget:max" },
+  "test6_first": { "@rollup": "projects.items.name:first" },
+  "test7_last": { "@rollup": "projects.items.name:last" },
+  "test8_concat": { "@rollup": "team.members.name:concat" },
+  "test9_unique": { "@rollup": "team.members.role:unique" },
+
+  "test10_filter_eq": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'active'",
+      "select": "name",
+      "aggregate": "concat"
+    }
+  },
+
+  "test11_filter_neq": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status != 'active'",
+      "aggregate": "count"
+    }
+  },
+
+  "test12_filter_gt": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "budget > 5000",
+      "select": "name",
+      "aggregate": "concat"
+    }
+  },
+
+  "test13_filter_lte": {
+    "@rollup": {
+      "relation": "team",
+      "property": "members",
+      "filter": "rate <= 70",
+      "select": "name",
+      "aggregate": "concat"
+    }
+  },
+
+  "test14_chained_expr": { "@expr": "test1_sum / test3_count" },
+  "test15_rollup_in_ternary": { "@expr": "test3_count > 3 ? 'many' : 'few'" },
+  "test16_rollup_string_concat": { "@expr": "'Total: $' + test1_sum + ' across ' + test3_count + ' projects'" }
+}

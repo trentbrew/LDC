@@ -113,11 +113,72 @@ A `.data` file is valid JSON-LD with LD-C extensions:
 - `examples/features.data` - Demonstrates ternary, `&&`, `||`, string concat
 - Updated `examples/budget.data` - Added `status` and `statusMessage` using new features
 
+### Session 3
+
+**Added Rollups (Notion-style)**:
+
+1. ✅ `@relations` - Load foreign `.data` files with aliases
+2. ✅ `@rollup` shorthand - `"relation.property.select:aggregate"`
+3. ✅ `@rollup` object form - With `filter` support
+4. ✅ Aggregations: `sum`, `avg`, `count`, `min`, `max`, `first`, `last`, `concat`, `unique`, `all`
+
+**Syntax Examples**:
+
+```jsonc
+// Shorthand
+"totalBudget": { "@rollup": "projects.items.budget:sum" }
+"projectCount": { "@rollup": "projects.items:count" }
+
+// With filter
+"activeBudget": {
+  "@rollup": {
+    "relation": "projects",
+    "property": "items",
+    "filter": "status == 'active'",
+    "select": "budget",
+    "aggregate": "sum"
+  }
+}
+```
+
+**New Examples**:
+
+- `examples/projects.data` - Project data source
+- `examples/team.data` - Team member data source
+- `examples/dashboard.data` - Dashboard with rollups from both sources
+
+**Added `@ref` for Simple Lookups**:
+
+1. ✅ `@ref` - Direct property access from relations
+2. ✅ Dot notation: `"config.theme.colors.primary"`
+3. ✅ Array index: `"projects.items[0].name"`
+4. ✅ Nested objects: `"config.limits.maxProjects"`
+
+**Syntax Examples**:
+
+```jsonc
+// Simple property
+"appName": { "@ref": "config.appName" }
+
+// Nested path
+"primaryColor": { "@ref": "config.theme.colors.primary" }
+
+// Array index
+"firstProject": { "@ref": "projects.items[0].name" }
+```
+
+**New Examples**:
+
+- `examples/config.data` - Nested config data source
+- `examples/ref-tests.data` - Comprehensive @ref tests
+- `examples/rollup-tests.data` - Comprehensive @rollup tests
+
 **Known Limitations**:
 
 - Expression parser doesn't support object literals `{ key: value }`
 - Expression parser doesn't support array literals `[1, 2, 3]`
 - `lowStockItems` (array result) doesn't serialize to quads (only primitives do)
+- Rollup filters only support simple comparisons (no `and`/`or`)
 
 **Next**:
 
@@ -125,6 +186,7 @@ A `.data` file is valid JSON-LD with LD-C extensions:
 - Improve serialization for complex values
 - Add `@rule` support for reactive updates
 - Date/time functions
+- Watch mode for related files
 
 ---
 

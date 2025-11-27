@@ -1,0 +1,40 @@
+{
+  "@context": { "test": "https://test.example/" },
+  "@id": "test:ref-tests",
+
+  "@relations": {
+    "projects": "./projects.data",
+    "team": "./team.data",
+    "config": "./config.data"
+  },
+
+  "firstProjectName": { "@ref": "projects.items[0].name" },
+  "firstProjectBudget": { "@ref": "projects.items[0].budget" },
+  "secondProjectStatus": { "@ref": "projects.items[1].status" },
+  "lastProjectName": { "@ref": "projects.items[3].name" },
+
+  "firstMemberName": { "@ref": "team.members[0].name" },
+  "firstMemberRole": { "@ref": "team.members[0].role" },
+  "secondMemberRate": { "@ref": "team.members[1].rate" },
+
+  "projectsId": { "@ref": "projects.@id" },
+  "teamId": { "@ref": "team.@id" },
+
+  "appName": { "@ref": "config.appName" },
+  "primaryColor": { "@ref": "config.theme.colors.primary" },
+  "darkMode": { "@ref": "config.theme.darkMode" },
+  "maxProjects": { "@ref": "config.limits.maxProjects" },
+  "hasRollups": { "@ref": "config.features.rollups" },
+
+  "combinedInfo": {
+    "@expr": "'Project: ' + firstProjectName + ' ($' + firstProjectBudget + ') - Lead: ' + firstMemberName"
+  },
+
+  "budgetPerHour": {
+    "@expr": "firstProjectBudget / 120"
+  },
+
+  "themeInfo": {
+    "@expr": "appName + ' uses ' + primaryColor + ' (dark mode: ' + darkMode + ')'"
+  }
+}

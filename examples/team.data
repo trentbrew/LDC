@@ -1,0 +1,11 @@
+{
+  "@context": { "ex": "https://example.com/" },
+  "@id": "ex:team",
+
+  "members": [
+    { "id": "m1", "name": "Alice", "role": "developer", "rate": 75 },
+    { "id": "m2", "name": "Bob", "role": "designer", "rate": 65 },
+    { "id": "m3", "name": "Carol", "role": "developer", "rate": 80 },
+    { "id": "m4", "name": "Dan", "role": "pm", "rate": 70 }
+  ]
+}

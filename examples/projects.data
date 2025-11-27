@@ -1,0 +1,11 @@
+{
+  "@context": { "ex": "https://example.com/" },
+  "@id": "ex:projects",
+
+  "items": [
+    { "id": "p1", "name": "Website Redesign", "budget": 5000, "status": "active", "hours": 120 },
+    { "id": "p2", "name": "Mobile App", "budget": 12000, "status": "active", "hours": 300 },
+    { "id": "p3", "name": "API Integration", "budget": 3000, "status": "completed", "hours": 80 },
+    { "id": "p4", "name": "Documentation", "budget": 1500, "status": "paused", "hours": 40 }
+  ]
+}
