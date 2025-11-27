@@ -91,10 +91,27 @@ A `.data` file is valid JSON-LD with LD-C extensions:
    - `examples/tasks.data` - Sprint tracking with array operations
    - `examples/inventory.data` - Inventory with low-stock alerts
 
+### Session 2
+
+**Added Expression Features**:
+
+1. ✅ Ternary operator: `condition ? then : else`
+2. ✅ `&&` and `||` as aliases for `and`/`or`
+3. ✅ String concatenation: `'Hello, ' + name`
+4. ✅ Nested ternary: `a ? (b ? 'x' : 'y') : 'z'`
+
 **Bugs Fixed**:
 
 - Computed properties weren't finding each other due to IRI expansion mismatch
 - Expression parser didn't support `!` (negation) operator
+- DAG dependency matching failed (reads used plain keys, writes used IRIs)
+- String concatenation failed when mixed with Decimal operations
+- `collectReads` didn't walk ternary expressions for dependency tracking
+
+**New Examples**:
+
+- `examples/features.data` - Demonstrates ternary, `&&`, `||`, string concat
+- Updated `examples/budget.data` - Added `status` and `statusMessage` using new features
 
 **Known Limitations**:
 
@@ -107,6 +124,7 @@ A `.data` file is valid JSON-LD with LD-C extensions:
 - Add object/array literal support to expression parser
 - Improve serialization for complex values
 - Add `@rule` support for reactive updates
+- Date/time functions
 
 ---
 

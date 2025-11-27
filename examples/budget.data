@@ -24,6 +24,14 @@
     "@expr": "savings / income * 100"
   },
 
+  "status": {
+    "@expr": "savingsRate >= 20 ? 'healthy' : (savingsRate >= 10 ? 'okay' : 'at-risk')"
+  },
+
+  "statusMessage": {
+    "@expr": "'Your budget is ' + status + ' with a ' + savingsRate + '% savings rate'"
+  },
+
   "isHealthy": {
     "@constraint": "savingsRate >= 20"
   }

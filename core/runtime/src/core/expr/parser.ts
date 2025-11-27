@@ -53,7 +53,7 @@ export function tokenize(input: string): Token[] {
     }
     const two = input.slice(i, i + 2);
     const three = input.slice(i, i + 3);
-    if (['??', '<=', '>=', '==', '!=', '=>', '**'].includes(two)) {
+    if (['??', '<=', '>=', '==', '!=', '=>', '**', '&&', '||'].includes(two)) {
       tks.push({ k: 'op', v: two });
       i += 2;
       continue;
@@ -68,6 +68,12 @@ export function tokenize(input: string): Token[] {
       let s = next();
       while (isId(peek())) s += next();
       tks.push({ k: 'id', v: s });
+      continue;
+    }
+    if (c === '?') {
+      // ternary operator
+      tks.push({ k: 'op', v: '?' });
+      i++;
       continue;
     }
     if (['(', ')', '[', ']', '.', ',', ':'].includes(c)) {
@@ -109,9 +115,13 @@ export function parseExpr(input: string): Expr {
 
   const bp = (op: string) => {
     switch (op) {
+      case '?':
+        return 0.5; // ternary has lowest precedence
       case 'or':
+      case '||':
         return 1;
       case 'and':
+      case '&&':
         return 2;
       case '??':
         return 3;
@@ -242,10 +252,29 @@ export function parseExpr(input: string): Expr {
     left = parsePostfix(left);
     while (true) {
       const t = peek();
-      if (t.k === 'punc' && ([')', ']', ','] as any).includes((t as any).v))
+      if (
+        t.k === 'punc' &&
+        ([')', ']', ',', ':'] as any).includes((t as any).v)
+      )
         break;
       if (t.k === 'op') {
         const op = (t as any).v as string;
+        // Handle ternary operator: cond ? then : else
+        if (op === '?') {
+          const rbp = bp(op);
+          if (rbp <= precedence) break;
+          next(); // consume ?
+          const thenExpr = parse(0);
+          expect('punc', ':');
+          const elseExpr = parse(rbp);
+          left = {
+            t: 'ternary',
+            cond: left,
+            then: thenExpr,
+            else: elseExpr,
+          } as any;
+          continue;
+        }
         const rbp = bp(op);
         if (rbp <= precedence) break;
         next();

@@ -89,12 +89,18 @@ export function evalExpr(ast: Expr, scope: Scope): any {
           case '>=':
             return l >= r;
           case 'and':
+          case '&&':
             return l && r;
           case 'or':
+          case '||':
             return l || r;
           default:
             throw new Error(`Unknown op ${node.op}`);
         }
+      }
+      case 'ternary': {
+        const cond = val(node.cond, s);
+        return cond ? val(node.then, s) : val(node.else, s);
       }
       case 'member': {
         const obj = val(node.obj, s);
@@ -134,6 +140,9 @@ function eq(a: any, b: any) {
 }
 
 function add(a: any, b: any) {
+  // String concatenation takes priority
+  if (typeof a === 'string' || typeof b === 'string')
+    return String(a) + String(b);
   if (isQty(a) && isQty(b)) return qtyAdd(a, b);
   if (isQty(a) && typeof b === 'number')
     return { ...a, n: D(a.n as any).add(b) } as any;

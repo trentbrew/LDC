@@ -1,0 +1,21 @@
+{
+  "@context": { "ex": "https://ex/" },
+  "@id": "ex:feature-test",
+
+  "name": "Alice",
+  "amount": 100,
+  "threshold": 50,
+  "isActive": true,
+  "hasPermission": false,
+
+  "greeting": { "@expr": "'Hello, ' + name" },
+  "message": { "@expr": "'You saved $' + amount + ' this month'" },
+
+  "status": { "@expr": "amount >= threshold ? 'good' : 'low'" },
+  "statusMessage": { "@expr": "amount >= threshold ? 'Balance is healthy' : 'Balance is low'" },
+
+  "canProceed": { "@expr": "isActive && amount > 0" },
+  "needsAttention": { "@expr": "!isActive || amount < threshold" },
+
+  "accessLevel": { "@expr": "isActive ? (hasPermission ? 'admin' : 'user') : 'guest'" }
+}

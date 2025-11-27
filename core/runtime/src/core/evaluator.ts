@@ -67,8 +67,8 @@ export class Evaluator implements IEvaluator {
             // Store under plain key for downstream expressions
             if (plainKey) state[plainKey] = v;
             state[n.writes[0]] = v;
-            // materialize to quads
-            const pred = n.writes[0];
+            // materialize to quads - use node id (expanded IRI) as predicate
+            const pred = n.id;
             const obj = serializeValue(v, ctx);
             if (obj !== undefined)
               ctx.quads.add({ s: subject, p: pred, o: obj });
@@ -196,12 +196,12 @@ function indexComputations(
       const pred = expandIri(k, ctxMap);
       // Keep plain key reads for state lookup (expressions use plain keys)
       const reads = collectReads(ast);
-      // Store both plain key and expanded IRI for writes
+      // Include plain key in writes for DAG dependency matching
       nodes.push({
         id: pred,
         kind: 'expr',
         reads,
-        writes: [pred],
+        writes: [k, pred],
         plainKey: k,
         expr,
         exprAst: ast,
@@ -245,7 +245,7 @@ function indexComputations(
         id: pred,
         kind: 'view',
         reads,
-        writes: [pred],
+        writes: [k, pred],
         plainKey: k,
         view: true,
         exprAst: ast,
@@ -304,6 +304,11 @@ function collectReads(ast: Ast): string[] {
       case 'call':
         walk(n.callee);
         n.args.forEach(walk);
+        break;
+      case 'ternary':
+        walk(n.cond);
+        walk(n.then);
+        walk(n.else);
         break;
       case 'lambda': {
         const prev = new Set(bound);
