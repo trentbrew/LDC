@@ -180,13 +180,123 @@ A `.data` file is valid JSON-LD with LD-C extensions:
 - `lowStockItems` (array result) doesn't serialize to quads (only primitives do)
 - Rollup filters only support simple comparisons (no `and`/`or`)
 
-**Next**:
+---
 
-- Add object/array literal support to expression parser
-- Improve serialization for complex values
-- Add `@rule` support for reactive updates
-- Date/time functions
-- Watch mode for related files
+## Session 4: Built-in Functions
+
+**Added 50+ Built-in Functions**:
+
+| Category    | Functions                                                                                                                                      |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Math**    | `$sqrt`, `$abs`, `$round`, `$floor`, `$ceil`, `$pow`, `$log`, `$log10`, `$sin`, `$cos`, `$tan`, `$pi`, `$e`, `$random`                         |
+| **String**  | `$lower`, `$upper`, `$trim`, `$len`, `$substr`, `$replace`, `$split`, `$join`, `$startsWith`, `$endsWith`, `$contains`, `$padStart`, `$padEnd` |
+| **Date**    | `$now`, `$today`, `$year`, `$month`, `$day`, `$hour`, `$minute`, `$dayOfWeek`, `$timestamp`, `$formatDate`, `$daysBetween`                     |
+| **Utility** | `$if`, `$default`, `$coalesce`, `$type`, `$isNull`, `$isNumber`, `$isString`, `$isBool`, `$isArray`, `$toNumber`, `$toString`, `$toBool`       |
+| **Array**   | `$first`, `$last`, `$at`, `$slice`, `$reverse`, `$sort`, `$unique`, `$flatten`, `$count`, `$sum`, `$avg`, `$min`, `$max`                       |
+
+**Usage Examples**:
+
+```jsonc
+// Math
+"squareRoot": { "@expr": "$sqrt(16)" },
+"rounded": { "@expr": "$round(3.14159, 2)" },
+
+// String
+"formatted": { "@expr": "$upper($trim(name))" },
+"initials": { "@expr": "$substr(firstName, 0, 1) + $substr(lastName, 0, 1)" },
+
+// Date
+"today": { "@expr": "$today()" },
+"daysUntilDue": { "@expr": "$daysBetween($today(), dueDate)" },
+"year": { "@expr": "$year(createdAt)" },
+
+// Utility
+"displayName": { "@expr": "$default(nickname, name)" },
+"status": { "@expr": "$if(active, 'Active', 'Inactive')" },
+"dataType": { "@expr": "$type(value)" },
+
+// Array
+"firstItem": { "@expr": "$first(items)" },
+"total": { "@expr": "$sum(amounts)" },
+"average": { "@expr": "$avg(scores)" }
+```
+
+**Bug Fixes**:
+
+- Fixed `or` operator parsing (was checking 3 chars, but `or` is 2)
+- Fixed string serialization for leading zeros (e.g., `"00042"`)
+
+**New Examples**:
+
+- `examples/builtins-test.data` - Comprehensive built-in function tests
+- `examples/stress-test.data` - All features combined
+- `examples/edge-cases.data` - Edge case handling
+
+---
+
+## Session 5: Literals, Compound Filters & Watch Mode
+
+**Array Literals**:
+
+```jsonc
+"myArray": { "@expr": "[1, 2, 3]" },
+"withVars": { "@expr": "[a, b, c]" },
+"nested": { "@expr": "[[1, 2], [3, 4]]" },
+"access": { "@expr": "[10, 20, 30][1]" }  // → 20
+```
+
+**Object Literals**:
+
+```jsonc
+"myObj": { "@expr": "{ x: 1, y: 2 }" },
+"computed": { "@expr": "{ sum: a + b, product: a * b }" },
+"access": { "@expr": "{ name: 'Bob' }.name" }  // → "Bob"
+```
+
+**Compound Rollup Filters**:
+
+```jsonc
+// AND with && or 'and'
+"activeHighBudget": {
+  "@rollup": {
+    "relation": "projects",
+    "property": "items",
+    "filter": "status == 'active' && budget > 5000",
+    "aggregate": "count"
+  }
+}
+
+// OR with || or 'or'
+"devOrDesigner": {
+  "@rollup": {
+    "relation": "team",
+    "property": "members",
+    "filter": "role == 'developer' || role == 'designer'",
+    "select": "name",
+    "aggregate": "concat"
+  }
+}
+```
+
+**Watch Mode for Related Files**:
+
+```bash
+bun eval-data.ts dashboard.data --watch
+# 👀 Watching dashboard.data for changes...
+# 👀 Also watching ./projects.data (projects)
+# 👀 Also watching ./team.data (team)
+```
+
+**New Examples**:
+
+- `examples/literals-test.data` - Array/object literals and compound filters
+
+**All 15 example files pass**.
+
+**Remaining Gaps**:
+
+- Array/object results don't serialize to RDF quads (by design)
+- No circular reference detection
 
 ---
 

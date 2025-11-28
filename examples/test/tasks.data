@@ -22,10 +22,22 @@
   },
 
   "progress": {
-    "@expr": "completedPoints / totalPoints * 100"
+    "@expr": "$round(completedPoints / totalPoints * 100, 1)"
   },
 
   "remainingTasks": {
     "@expr": "items.filter(i => !i.done).length"
+  },
+
+  "status": {
+    "@expr": "progress >= 100 ? 'complete' : (progress >= 50 ? 'on-track' : 'behind')"
+  },
+
+  "progressBar": {
+    "@expr": "'Progress: ' + progress + '% (' + completedPoints + '/' + totalPoints + ' points)'"
+  },
+
+  "sprintSummary": {
+    "@expr": "{ total: totalPoints, completed: completedPoints, remaining: totalPoints - completedPoints, progress: progress }"
   }
 }

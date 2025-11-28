@@ -1,0 +1,33 @@
+{
+  "@context": { "tm": "https://taskmgmt.local/" },
+  "@id": "tm:cycles",
+  "@type": "CycleCollection",
+
+  "items": [
+    {
+      "id": "cycle-1",
+      "name": "Sprint 42",
+      "startDate": "2024-02-19",
+      "endDate": "2024-03-01",
+      "status": "completed"
+    },
+    {
+      "id": "cycle-2",
+      "name": "Sprint 43",
+      "startDate": "2024-03-04",
+      "endDate": "2024-03-15",
+      "status": "active"
+    },
+    {
+      "id": "cycle-3",
+      "name": "Sprint 44",
+      "startDate": "2024-03-18",
+      "endDate": "2024-03-29",
+      "status": "upcoming"
+    }
+  ],
+
+  "currentCycle": { "@expr": "items.filter(c => c.status == 'active')[0]" },
+  "completedCount": { "@expr": "items.filter(c => c.status == 'completed').length" },
+  "upcomingCount": { "@expr": "items.filter(c => c.status == 'upcoming').length" }
+}

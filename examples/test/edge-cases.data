@@ -1,0 +1,61 @@
+{
+  "@context": { "edge": "https://edge.test/" },
+  "@id": "edge:cases",
+
+  "@relations": {
+    "projects": "./projects.data",
+    "team": "./team.data",
+    "config": "./config.data"
+  },
+
+  "emptyString": "",
+  "whitespaceString": "   ",
+  "specialChars": "hello@world.com",
+  "unicodeString": "Hello 世界 🌍",
+  "escapedQuotes": "He said \"hello\"",
+
+  "test_empty_string_concat": { "@expr": "'' + 'test'" },
+  "test_empty_string_bool": { "@expr": "emptyString == ''" },
+  "test_whitespace_trim": { "@expr": "whitespaceString == '   '" },
+
+  "test_null_handling": { "@expr": "staticNull == null" },
+  "test_undefined_ref": { "@ref": "config.nonexistent.path" },
+
+  "test_deeply_nested": { "@ref": "config.theme.colors.primary" },
+
+  "test_rollup_empty_filter": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'nonexistent'",
+      "select": "budget",
+      "aggregate": "sum"
+    }
+  },
+
+  "test_rollup_empty_count": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'nonexistent'",
+      "aggregate": "count"
+    }
+  },
+
+  "test_chained_ternary": {
+    "@expr": "test_rollup_empty_count == 0 ? 'none' : (test_rollup_empty_count == 1 ? 'one' : 'many')"
+  },
+
+  "test_complex_boolean": {
+    "@expr": "(test_rollup_empty_count == 0) && (test_deeply_nested == '#3B82F6')"
+  },
+
+  "test_math_edge_infinity": { "@expr": "1 / 0" },
+  "test_math_edge_nan": { "@expr": "0 / 0" },
+
+  "staticNull": null,
+
+  "test_array_bounds_safe": { "@ref": "projects.items[99]" },
+
+  "test_self_reference_guard": { "@expr": "1 + 1" }
+}

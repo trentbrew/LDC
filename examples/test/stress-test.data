@@ -1,0 +1,101 @@
+{
+  "@context": { "stress": "https://stress.test/" },
+  "@id": "stress:comprehensive",
+
+  "@relations": {
+    "projects": "./projects.data",
+    "team": "./team.data",
+    "config": "./config.data"
+  },
+
+  "staticNum": 100,
+  "staticStr": "hello",
+  "staticBool": true,
+  "staticNull": null,
+  "staticZero": 0,
+  "staticNegative": -50,
+  "staticFloat": 3.14159,
+
+  "test_basic_arithmetic": { "@expr": "10 + 20 * 3 - 5" },
+  "test_division": { "@expr": "100 / 4" },
+  "test_modulo": { "@expr": "17 % 5" },
+  "test_negative": { "@expr": "-staticNum" },
+  "test_parentheses": { "@expr": "(10 + 20) * 3" },
+  "test_nested_parens": { "@expr": "((5 + 3) * (10 - 2)) / 4" },
+
+  "test_comparison_gt": { "@expr": "staticNum > 50" },
+  "test_comparison_lt": { "@expr": "staticNum < 50" },
+  "test_comparison_eq": { "@expr": "staticNum == 100" },
+  "test_comparison_neq": { "@expr": "staticNum != 100" },
+  "test_comparison_gte": { "@expr": "staticNum >= 100" },
+  "test_comparison_lte": { "@expr": "staticNum <= 100" },
+
+  "test_logical_and": { "@expr": "staticBool and true" },
+  "test_logical_or": { "@expr": "staticBool or false" },
+  "test_logical_not": { "@expr": "!staticBool" },
+  "test_logical_and_alias": { "@expr": "staticBool && true" },
+  "test_logical_or_alias": { "@expr": "false || staticBool" },
+
+  "test_ternary_true": { "@expr": "staticBool ? 'yes' : 'no'" },
+  "test_ternary_false": { "@expr": "!staticBool ? 'yes' : 'no'" },
+  "test_ternary_nested": { "@expr": "staticNum > 50 ? (staticNum > 75 ? 'high' : 'medium') : 'low'" },
+  "test_ternary_with_expr": { "@expr": "staticNum > 0 ? staticNum * 2 : 0" },
+
+  "test_string_concat": { "@expr": "'Hello ' + staticStr + '!'" },
+  "test_string_num_concat": { "@expr": "'Value: ' + staticNum" },
+  "test_string_bool_concat": { "@expr": "'Active: ' + staticBool" },
+  "test_multipart_concat": { "@expr": "'a' + 'b' + 'c' + 'd' + 'e'" },
+
+  "test_ref_simple": { "@ref": "config.appName" },
+  "test_ref_nested": { "@ref": "config.theme.colors.primary" },
+  "test_ref_array": { "@ref": "projects.items[0].name" },
+  "test_ref_array_last": { "@ref": "projects.items[3]" },
+  "test_ref_bool": { "@ref": "config.theme.darkMode" },
+
+  "test_rollup_sum": { "@rollup": "projects.items.budget:sum" },
+  "test_rollup_avg": { "@rollup": "projects.items.budget:avg" },
+  "test_rollup_count": { "@rollup": "projects.items:count" },
+  "test_rollup_min": { "@rollup": "projects.items.budget:min" },
+  "test_rollup_max": { "@rollup": "projects.items.budget:max" },
+  "test_rollup_concat": { "@rollup": "team.members.name:concat" },
+  "test_rollup_unique": { "@rollup": "team.members.role:unique" },
+  "test_rollup_first": { "@rollup": "projects.items.name:first" },
+  "test_rollup_last": { "@rollup": "projects.items.name:last" },
+
+  "test_rollup_filter_eq": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'active'",
+      "select": "budget",
+      "aggregate": "sum"
+    }
+  },
+  "test_rollup_filter_gt": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "budget > 5000",
+      "aggregate": "count"
+    }
+  },
+
+  "test_chain_ref_expr": { "@expr": "test_ref_simple + ' v1.0'" },
+  "test_chain_rollup_expr": { "@expr": "test_rollup_sum / test_rollup_count" },
+  "test_chain_complex": {
+    "@expr": "test_rollup_count + ' projects totaling $' + test_rollup_sum + ' (avg: $' + test_rollup_avg + ')'"
+  },
+
+  "test_zero_division": { "@expr": "staticZero == 0 ? 'undefined' : 100 / staticZero" },
+  "test_negative_ops": { "@expr": "staticNegative * -1" },
+  "test_float_precision": { "@expr": "staticFloat * 2" },
+
+  "test_constraint_pass": { "@constraint": "staticNum > 0" },
+  "test_constraint_fail": { "@constraint": "staticNum < 0" },
+
+  "test_view_simple": {
+    "@view": {
+      "@expr": "test_rollup_sum > 10000"
+    }
+  }
+}

@@ -58,9 +58,14 @@ export function tokenize(input: string): Token[] {
       i += 2;
       continue;
     }
-    if (['and', 'or', 'not'].includes(three) && !isId(input[i + 3] ?? '')) {
+    if (['and', 'not'].includes(three) && !isId(input[i + 3] ?? '')) {
       tks.push({ k: 'op', v: three });
       i += 3;
+      continue;
+    }
+    if (two === 'or' && !isId(input[i + 2] ?? '')) {
+      tks.push({ k: 'op', v: 'or' });
+      i += 2;
       continue;
     }
     if (c === '?' && isId(input[i + 1] ?? '')) {
@@ -76,7 +81,7 @@ export function tokenize(input: string): Token[] {
       i++;
       continue;
     }
-    if (['(', ')', '[', ']', '.', ',', ':'].includes(c)) {
+    if (['(', ')', '[', ']', '{', '}', '.', ',', ':'].includes(c)) {
       tks.push({ k: 'punc', v: c });
       i++;
       continue;
@@ -208,6 +213,41 @@ export function parseExpr(input: string): Expr {
     ) {
       const expr = parse(bp('**'));
       return { t: 'unary', op: (t as any).v, expr };
+    }
+    // Array literal: [1, 2, 3]
+    if (t.k === 'punc' && (t as any).v === '[') {
+      const elements: Expr[] = [];
+      if (!(peek().k === 'punc' && (peek() as any).v === ']')) {
+        elements.push(parse(0));
+        while (peek().k === 'punc' && (peek() as any).v === ',') {
+          next();
+          if (peek().k === 'punc' && (peek() as any).v === ']') break; // trailing comma
+          elements.push(parse(0));
+        }
+      }
+      expect('punc', ']');
+      return { t: 'array', elements };
+    }
+    // Object literal: { key: value, ... }
+    if (t.k === 'punc' && (t as any).v === '{') {
+      const properties: { key: string; value: Expr }[] = [];
+      if (!(peek().k === 'punc' && (peek() as any).v === '}')) {
+        // Parse first property
+        const key = expect('id');
+        expect('punc', ':');
+        const value = parse(0);
+        properties.push({ key: (key as any).v, value });
+        while (peek().k === 'punc' && (peek() as any).v === ',') {
+          next();
+          if (peek().k === 'punc' && (peek() as any).v === '}') break; // trailing comma
+          const k = expect('id');
+          expect('punc', ':');
+          const v = parse(0);
+          properties.push({ key: (k as any).v, value: v });
+        }
+      }
+      expect('punc', '}');
+      return { t: 'object', properties };
     }
     throw new Error(`Unexpected token: ${t.k}:${(t as any).v}`);
   }

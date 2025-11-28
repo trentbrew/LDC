@@ -1,0 +1,106 @@
+{
+  "@context": { "tm": "https://taskmgmt.local/" },
+  "@id": "tm:dashboard",
+  "@type": "Dashboard",
+
+  "@relations": {
+    "people": "./people.data",
+    "projects": "./projects.data",
+    "milestones": "./milestones.data",
+    "cycles": "./cycles.data",
+    "tasks": "./tasks.data",
+    "notes": "./notes.data"
+  },
+
+  "teamSize": { "@rollup": "people.members:count" },
+  "totalCapacity": { "@rollup": "people.members.capacity:sum" },
+  "avgRate": { "@rollup": "people.members.rate:avg" },
+
+  "projectCount": { "@rollup": "projects.items:count" },
+  "activeProjects": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'active'",
+      "aggregate": "count"
+    }
+  },
+  "totalBudget": { "@rollup": "projects.items.budget:sum" },
+  "totalBudgetFormatted": { "@expr": "$currency(totalBudget)" },
+
+  "totalTasks": { "@rollup": "tasks.items:count" },
+  "totalPoints": { "@rollup": "tasks.items.points:sum" },
+  "completedTasks": {
+    "@rollup": {
+      "relation": "tasks",
+      "property": "items",
+      "filter": "status == 'done'",
+      "aggregate": "count"
+    }
+  },
+  "completedPoints": {
+    "@rollup": {
+      "relation": "tasks",
+      "property": "items",
+      "filter": "status == 'done'",
+      "select": "points",
+      "aggregate": "sum"
+    }
+  },
+  "inProgressTasks": {
+    "@rollup": {
+      "relation": "tasks",
+      "property": "items",
+      "filter": "status == 'in-progress'",
+      "aggregate": "count"
+    }
+  },
+  "highPriorityTodo": {
+    "@rollup": {
+      "relation": "tasks",
+      "property": "items",
+      "filter": "priority == 'high' && status != 'done'",
+      "aggregate": "count"
+    }
+  },
+
+  "milestoneCount": { "@rollup": "milestones.items:count" },
+  "milestonesCompleted": {
+    "@rollup": {
+      "relation": "milestones",
+      "property": "items",
+      "filter": "status == 'completed'",
+      "aggregate": "count"
+    }
+  },
+  "milestonesInProgress": {
+    "@rollup": {
+      "relation": "milestones",
+      "property": "items",
+      "filter": "status == 'in-progress'",
+      "aggregate": "count"
+    }
+  },
+
+  "noteCount": { "@rollup": "notes.items:count" },
+
+  "progress": { "@expr": "totalPoints > 0 ? completedPoints / totalPoints : 0" },
+  "progressFormatted": { "@expr": "$percent(progress)" },
+
+  "velocity": { "@expr": "$round(completedPoints / 2, 1)" },
+
+  "estimatedCompletion": {
+    "@expr": "velocity > 0 ? $round((totalPoints - completedPoints) / velocity, 0) : 0"
+  },
+  "estimatedCompletionLabel": {
+    "@expr": "estimatedCompletion + ' sprints remaining'"
+  },
+
+  "summary": {
+    "@expr": "{ team: teamSize, projects: projectCount, tasks: totalTasks, progress: $percent(progress), budget: $currency(totalBudget) }"
+  },
+
+  "healthStatus": {
+    "@expr": "highPriorityTodo > 3 ? 'at-risk' : (progress >= 0.5 ? 'on-track' : 'behind')"
+  }
+}

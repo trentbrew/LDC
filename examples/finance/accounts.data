@@ -1,0 +1,70 @@
+{
+  "@context": { "fin": "https://finance.local/" },
+  "@id": "fin:accounts",
+  "@type": "AccountCollection",
+
+  "items": [
+    {
+      "id": "acc-checking",
+      "name": "Primary Checking",
+      "type": "checking",
+      "institution": "Chase",
+      "balance": 4250.00,
+      "currency": "USD"
+    },
+    {
+      "id": "acc-savings",
+      "name": "Emergency Fund",
+      "type": "savings",
+      "institution": "Ally",
+      "balance": 15000.00,
+      "apy": 0.045,
+      "currency": "USD"
+    },
+    {
+      "id": "acc-investment",
+      "name": "Brokerage",
+      "type": "investment",
+      "institution": "Fidelity",
+      "balance": 42500.00,
+      "currency": "USD"
+    },
+    {
+      "id": "acc-retirement",
+      "name": "401k",
+      "type": "retirement",
+      "institution": "Vanguard",
+      "balance": 85000.00,
+      "currency": "USD"
+    },
+    {
+      "id": "acc-credit",
+      "name": "Rewards Card",
+      "type": "credit",
+      "institution": "Amex",
+      "balance": -1850.00,
+      "limit": 10000,
+      "apr": 0.1999,
+      "currency": "USD"
+    }
+  ],
+
+  "totalAssets": {
+    "@expr": "items.filter(a => a.balance > 0).map(a => a.balance).reduce((a, b) => a + b, 0)"
+  },
+  "totalLiabilities": {
+    "@expr": "$abs(items.filter(a => a.balance < 0).map(a => a.balance).reduce((a, b) => a + b, 0))"
+  },
+  "netWorth": { "@expr": "totalAssets - totalLiabilities" },
+  "netWorthFormatted": { "@expr": "$currency(netWorth)" },
+
+  "liquidAssets": {
+    "@expr": "items.filter(a => a.type == 'checking' || a.type == 'savings').map(a => a.balance).reduce((a, b) => a + b, 0)"
+  },
+  "liquidAssetsFormatted": { "@expr": "$currency(liquidAssets)" },
+
+  "creditUtilization": {
+    "@expr": "items.filter(a => a.type == 'credit')[0].balance / items.filter(a => a.type == 'credit')[0].limit * -1"
+  },
+  "creditUtilizationFormatted": { "@expr": "$percent(creditUtilization)" }
+}

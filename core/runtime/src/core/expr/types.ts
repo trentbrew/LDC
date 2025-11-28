@@ -10,7 +10,9 @@ export type Expr =
   | { t: 'member'; obj: Expr; prop: string }
   | { t: 'index'; obj: Expr; idx: Expr }
   | { t: 'call'; callee: Expr; args: Expr[] }
-  | { t: 'lambda'; params: string[]; body: Expr };
+  | { t: 'lambda'; params: string[]; body: Expr }
+  | { t: 'array'; elements: Expr[] }
+  | { t: 'object'; properties: { key: string; value: Expr }[] };
 
 export type Token =
   | { k: 'num'; v: number }

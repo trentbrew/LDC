@@ -208,6 +208,57 @@ function processRefs(
   return computed;
 }
 
+// Evaluate a filter expression against an item
+// Supports compound filters with && and ||
+function evaluateFilter(filter: string, item: Record<string, any>): boolean {
+  // Split by || first (lower precedence)
+  const orParts = filter.split(/\s*\|\|\s*/);
+  if (orParts.length > 1) {
+    return orParts.some((part) => evaluateFilter(part.trim(), item));
+  }
+
+  // Split by && (higher precedence)
+  const andParts = filter.split(/\s*&&\s*/);
+  if (andParts.length > 1) {
+    return andParts.every((part) => evaluateFilter(part.trim(), item));
+  }
+
+  // Handle 'and' and 'or' keywords
+  const orKeywordParts = filter.split(/\s+or\s+/i);
+  if (orKeywordParts.length > 1) {
+    return orKeywordParts.some((part) => evaluateFilter(part.trim(), item));
+  }
+
+  const andKeywordParts = filter.split(/\s+and\s+/i);
+  if (andKeywordParts.length > 1) {
+    return andKeywordParts.every((part) => evaluateFilter(part.trim(), item));
+  }
+
+  // Single comparison: "prop op value"
+  const match = filter.match(/(\w+)\s*(==|!=|>=|<=|>|<)\s*['"]?([^'"]+)['"]?/);
+  if (match) {
+    const [, prop, op, val] = match;
+    const itemVal = item[prop];
+    switch (op) {
+      case '==':
+        return String(itemVal) === val;
+      case '!=':
+        return String(itemVal) !== val;
+      case '>':
+        return Number(itemVal) > Number(val);
+      case '<':
+        return Number(itemVal) < Number(val);
+      case '>=':
+        return Number(itemVal) >= Number(val);
+      case '<=':
+        return Number(itemVal) <= Number(val);
+    }
+  }
+
+  // If no match, return true (no filter)
+  return true;
+}
+
 // Process @rollup properties
 function processRollups(
   doc: any,
@@ -247,32 +298,9 @@ function processRollups(
 
       // Apply filter if specified
       if (config.filter) {
-        // Simple filter evaluation (for MVP, just support basic comparisons)
-        items = items.filter((item: any) => {
-          // Parse simple filter like "status == 'active'" (match multi-char ops first)
-          const match = config.filter!.match(
-            /(\w+)\s*(==|!=|>=|<=|>|<)\s*['"]?([^'"]+)['"]?/,
-          );
-          if (match) {
-            const [, prop, op, val] = match;
-            const itemVal = item[prop];
-            switch (op) {
-              case '==':
-                return String(itemVal) === val;
-              case '!=':
-                return String(itemVal) !== val;
-              case '>':
-                return Number(itemVal) > Number(val);
-              case '<':
-                return Number(itemVal) < Number(val);
-              case '>=':
-                return Number(itemVal) >= Number(val);
-              case '<=':
-                return Number(itemVal) <= Number(val);
-            }
-          }
-          return true;
-        });
+        items = items.filter((item: any) =>
+          evaluateFilter(config.filter!, item),
+        );
       }
 
       // Extract values to aggregate
@@ -377,8 +405,17 @@ function expandIri(curieOrIri: string, ctxMap: Record<string, string>): string {
 function parseValue(o: string): any {
   if (o === 'true') return true;
   if (o === 'false') return false;
+  // Don't convert strings with leading zeros (like "00042") to numbers
+  const trimmed = o.trim();
+  if (
+    trimmed.length > 1 &&
+    trimmed.startsWith('0') &&
+    !trimmed.startsWith('0.')
+  ) {
+    return o;
+  }
   const n = Number(o);
-  if (!isNaN(n) && o.trim() !== '') return n;
+  if (!isNaN(n) && trimmed !== '') return n;
   return o;
 }
 
@@ -443,11 +480,33 @@ async function main() {
   await runEval();
 
   if (watchMode) {
+    // Get related files to watch
+    const content = readFileSync(filePath, 'utf8');
+    const doc = JSON.parse(content);
+    const baseDir = dirname(filePath);
+    const watchedFiles = new Set<string>([filePath]);
+
+    // Watch main file
     console.log(`👀 Watching ${file} for changes...`);
     watchFile(filePath, { interval: 500 }, async () => {
       console.log('\n🔄 File changed, re-evaluating...');
       await runEval();
     });
+
+    // Watch related files if @relations exists
+    if (doc['@relations']) {
+      for (const [alias, relPath] of Object.entries(doc['@relations'])) {
+        const fullPath = resolve(baseDir, relPath as string);
+        if (!watchedFiles.has(fullPath)) {
+          watchedFiles.add(fullPath);
+          console.log(`👀 Also watching ${relPath} (${alias})`);
+          watchFile(fullPath, { interval: 500 }, async () => {
+            console.log(`\n🔄 Related file ${alias} changed, re-evaluating...`);
+            await runEval();
+          });
+        }
+      }
+    }
   }
 }
 

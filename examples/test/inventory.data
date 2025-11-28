@@ -20,12 +20,32 @@
     "@expr": "items.map(i => i.qty * i.price).reduce((a, b) => a + b, 0)"
   },
 
+  "totalValueFormatted": {
+    "@expr": "$currency(totalValue)"
+  },
+
   "lowStockItems": {
     "@expr": "items.filter(i => i.qty < i.minStock)"
   },
 
   "lowStockCount": {
     "@expr": "lowStockItems.length"
+  },
+
+  "avgPrice": {
+    "@expr": "items.map(i => i.price).reduce((a, b) => a + b, 0) / items.length"
+  },
+
+  "avgPriceFormatted": {
+    "@expr": "$currency(avgPrice)"
+  },
+
+  "inventoryStatus": {
+    "@expr": "lowStockCount == 0 ? 'healthy' : (lowStockCount == 1 ? 'warning' : 'critical')"
+  },
+
+  "summary": {
+    "@expr": "'Total: ' + $number(totalItems) + ' items worth ' + $currency(totalValue) + ' (' + lowStockCount + ' low stock)'"
   },
 
   "hasLowStock": {

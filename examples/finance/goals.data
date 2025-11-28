@@ -1,0 +1,64 @@
+{
+  "@context": { "fin": "https://finance.local/" },
+  "@id": "fin:goals",
+  "@type": "GoalCollection",
+
+  "items": [
+    {
+      "id": "goal-emergency",
+      "name": "Emergency Fund",
+      "type": "savings",
+      "targetAmount": 20000,
+      "currentAmount": 15000,
+      "targetDate": "2024-12-31",
+      "priority": "high",
+      "account": "acc-savings"
+    },
+    {
+      "id": "goal-vacation",
+      "name": "Europe Trip",
+      "type": "savings",
+      "targetAmount": 5000,
+      "currentAmount": 1200,
+      "targetDate": "2025-06-01",
+      "priority": "medium",
+      "account": "acc-savings"
+    },
+    {
+      "id": "goal-car",
+      "name": "New Car Down Payment",
+      "type": "savings",
+      "targetAmount": 8000,
+      "currentAmount": 2500,
+      "targetDate": "2025-12-31",
+      "priority": "medium",
+      "account": "acc-savings"
+    },
+    {
+      "id": "goal-debt",
+      "name": "Pay Off Credit Card",
+      "type": "debt",
+      "targetAmount": 0,
+      "currentAmount": 1850,
+      "targetDate": "2024-06-30",
+      "priority": "high",
+      "account": "acc-credit"
+    },
+    {
+      "id": "goal-retirement",
+      "name": "Retirement (1M)",
+      "type": "investment",
+      "targetAmount": 1000000,
+      "currentAmount": 85000,
+      "targetDate": "2050-01-01",
+      "priority": "high",
+      "account": "acc-retirement"
+    }
+  ],
+
+  "totalTargeted": { "@expr": "items.filter(g => g.type == 'savings').map(g => g.targetAmount).reduce((a, b) => a + b, 0)" },
+  "totalSaved": { "@expr": "items.filter(g => g.type == 'savings').map(g => g.currentAmount).reduce((a, b) => a + b, 0)" },
+
+  "highPriorityCount": { "@expr": "items.filter(g => g.priority == 'high').length" },
+  "activeGoals": { "@expr": "items.length" }
+}

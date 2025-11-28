@@ -1,0 +1,39 @@
+{
+  "@context": { "fin": "https://finance.local/" },
+  "@id": "fin:transactions",
+  "@type": "TransactionCollection",
+
+  "items": [
+    { "id": "tx-1", "date": "2024-03-01", "description": "Paycheck", "amount": 3200, "category": "income", "account": "acc-checking" },
+    { "id": "tx-2", "date": "2024-03-01", "description": "Rent", "amount": -1650, "category": "housing", "account": "acc-checking" },
+    { "id": "tx-3", "date": "2024-03-02", "description": "Grocery Store", "amount": -127.43, "category": "food", "account": "acc-credit" },
+    { "id": "tx-4", "date": "2024-03-03", "description": "Gas Station", "amount": -45.00, "category": "transport", "account": "acc-credit" },
+    { "id": "tx-5", "date": "2024-03-04", "description": "Electric Bill", "amount": -85.00, "category": "utilities", "account": "acc-checking" },
+    { "id": "tx-6", "date": "2024-03-05", "description": "Netflix", "amount": -15.99, "category": "subscriptions", "account": "acc-credit" },
+    { "id": "tx-7", "date": "2024-03-06", "description": "Restaurant", "amount": -52.30, "category": "food", "account": "acc-credit" },
+    { "id": "tx-8", "date": "2024-03-07", "description": "Freelance Payment", "amount": 1200, "category": "income", "account": "acc-checking" },
+    { "id": "tx-9", "date": "2024-03-08", "description": "Transfer to Savings", "amount": -500, "category": "transfer", "account": "acc-checking" },
+    { "id": "tx-10", "date": "2024-03-08", "description": "Transfer from Checking", "amount": 500, "category": "transfer", "account": "acc-savings" },
+    { "id": "tx-11", "date": "2024-03-10", "description": "Gym Membership", "amount": -40, "category": "health", "account": "acc-checking" },
+    { "id": "tx-12", "date": "2024-03-11", "description": "Coffee Shop", "amount": -6.50, "category": "food", "account": "acc-credit" },
+    { "id": "tx-13", "date": "2024-03-12", "description": "Amazon Purchase", "amount": -89.99, "category": "personal", "account": "acc-credit" },
+    { "id": "tx-14", "date": "2024-03-14", "description": "Interest Earned", "amount": 56.25, "category": "income", "account": "acc-savings" },
+    { "id": "tx-15", "date": "2024-03-15", "description": "Paycheck", "amount": 3200, "category": "income", "account": "acc-checking" }
+  ],
+
+  "totalIncome": {
+    "@expr": "items.filter(t => t.category == 'income').map(t => t.amount).reduce((a, b) => a + b, 0)"
+  },
+  "totalExpenses": {
+    "@expr": "$abs(items.filter(t => t.amount < 0 && t.category != 'transfer').map(t => t.amount).reduce((a, b) => a + b, 0))"
+  },
+  "netCashFlow": { "@expr": "totalIncome - totalExpenses" },
+
+  "totalIncomeFormatted": { "@expr": "$currency(totalIncome)" },
+  "totalExpensesFormatted": { "@expr": "$currency(totalExpenses)" },
+  "netCashFlowFormatted": { "@expr": "$currency(netCashFlow)" },
+
+  "transactionCount": { "@expr": "items.length" },
+  "avgTransaction": { "@expr": "$abs(items.filter(t => t.amount < 0).map(t => t.amount).reduce((a, b) => a + b, 0) / items.filter(t => t.amount < 0).length)" },
+  "avgTransactionFormatted": { "@expr": "$currency(avgTransaction)" }
+}

@@ -1,0 +1,115 @@
+{
+  "@context": { "tm": "https://taskmgmt.local/" },
+  "@id": "tm:tasks",
+  "@type": "TaskCollection",
+
+  "items": [
+    {
+      "id": "task-1",
+      "title": "Design homepage mockups",
+      "status": "done",
+      "priority": "high",
+      "points": 5,
+      "assignee": "p3",
+      "project": "proj-1",
+      "cycle": "cycle-1",
+      "milestone": "ms-1"
+    },
+    {
+      "id": "task-2",
+      "title": "Implement responsive nav",
+      "status": "done",
+      "priority": "high",
+      "points": 3,
+      "assignee": "p2",
+      "project": "proj-1",
+      "cycle": "cycle-1",
+      "milestone": "ms-1"
+    },
+    {
+      "id": "task-3",
+      "title": "Build contact form",
+      "status": "in-progress",
+      "priority": "medium",
+      "points": 3,
+      "assignee": "p2",
+      "project": "proj-1",
+      "cycle": "cycle-2",
+      "milestone": "ms-2"
+    },
+    {
+      "id": "task-4",
+      "title": "Setup CI/CD pipeline",
+      "status": "in-progress",
+      "priority": "high",
+      "points": 5,
+      "assignee": "p4",
+      "project": "proj-1",
+      "cycle": "cycle-2",
+      "milestone": "ms-2"
+    },
+    {
+      "id": "task-5",
+      "title": "Write unit tests",
+      "status": "todo",
+      "priority": "medium",
+      "points": 8,
+      "assignee": "p4",
+      "project": "proj-1",
+      "cycle": "cycle-2",
+      "milestone": "ms-2"
+    },
+    {
+      "id": "task-6",
+      "title": "Design app onboarding",
+      "status": "done",
+      "priority": "high",
+      "points": 5,
+      "assignee": "p3",
+      "project": "proj-2",
+      "cycle": "cycle-1",
+      "milestone": "ms-4"
+    },
+    {
+      "id": "task-7",
+      "title": "Implement auth flow",
+      "status": "in-progress",
+      "priority": "high",
+      "points": 8,
+      "assignee": "p1",
+      "project": "proj-2",
+      "cycle": "cycle-2",
+      "milestone": "ms-4"
+    },
+    {
+      "id": "task-8",
+      "title": "Build dashboard screen",
+      "status": "todo",
+      "priority": "medium",
+      "points": 5,
+      "assignee": "p2",
+      "project": "proj-2",
+      "cycle": "cycle-3",
+      "milestone": "ms-4"
+    },
+    {
+      "id": "task-9",
+      "title": "API documentation",
+      "status": "todo",
+      "priority": "low",
+      "points": 3,
+      "assignee": "p1",
+      "project": "proj-3",
+      "cycle": "cycle-3",
+      "milestone": "ms-6"
+    }
+  ],
+
+  "totalCount": { "@expr": "items.length" },
+  "totalPoints": { "@expr": "items.map(t => t.points).reduce((a, b) => a + b, 0)" },
+  "doneCount": { "@expr": "items.filter(t => t.status == 'done').length" },
+  "inProgressCount": { "@expr": "items.filter(t => t.status == 'in-progress').length" },
+  "todoCount": { "@expr": "items.filter(t => t.status == 'todo').length" },
+  "donePoints": { "@expr": "items.filter(t => t.status == 'done').map(t => t.points).reduce((a, b) => a + b, 0)" },
+  "highPriorityCount": { "@expr": "items.filter(t => t.priority == 'high').length" }
+}

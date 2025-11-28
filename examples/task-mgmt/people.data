@@ -1,0 +1,45 @@
+{
+  "@context": { "tm": "https://taskmgmt.local/" },
+  "@id": "tm:people",
+  "@type": "PeopleCollection",
+
+  "members": [
+    {
+      "id": "p1",
+      "name": "Alice Chen",
+      "email": "alice@example.com",
+      "role": "lead",
+      "rate": 95,
+      "capacity": 40
+    },
+    {
+      "id": "p2",
+      "name": "Bob Martinez",
+      "email": "bob@example.com",
+      "role": "developer",
+      "rate": 75,
+      "capacity": 40
+    },
+    {
+      "id": "p3",
+      "name": "Carol Johnson",
+      "email": "carol@example.com",
+      "role": "designer",
+      "rate": 70,
+      "capacity": 32
+    },
+    {
+      "id": "p4",
+      "name": "Dan Kim",
+      "email": "dan@example.com",
+      "role": "developer",
+      "rate": 80,
+      "capacity": 40
+    }
+  ],
+
+  "teamSize": { "@expr": "members.length" },
+  "totalCapacity": { "@expr": "members.map(m => m.capacity).reduce((a, b) => a + b, 0)" },
+  "avgRate": { "@expr": "members.map(m => m.rate).reduce((a, b) => a + b, 0) / members.length" },
+  "avgRateFormatted": { "@expr": "$currency(avgRate) + '/hr'" }
+}

@@ -1,0 +1,49 @@
+{
+  "@context": { "tm": "https://taskmgmt.local/" },
+  "@id": "tm:projects",
+  "@type": "ProjectCollection",
+
+  "items": [
+    {
+      "id": "proj-1",
+      "name": "Website Redesign",
+      "status": "active",
+      "budget": 25000,
+      "startDate": "2024-01-15",
+      "targetDate": "2024-04-30",
+      "lead": "p1"
+    },
+    {
+      "id": "proj-2",
+      "name": "Mobile App v2",
+      "status": "active",
+      "budget": 40000,
+      "startDate": "2024-02-01",
+      "targetDate": "2024-06-30",
+      "lead": "p2"
+    },
+    {
+      "id": "proj-3",
+      "name": "API Integration",
+      "status": "planning",
+      "budget": 15000,
+      "startDate": "2024-03-01",
+      "targetDate": "2024-05-15",
+      "lead": "p4"
+    },
+    {
+      "id": "proj-4",
+      "name": "Design System",
+      "status": "completed",
+      "budget": 12000,
+      "startDate": "2023-10-01",
+      "targetDate": "2024-01-15",
+      "lead": "p3"
+    }
+  ],
+
+  "totalBudget": { "@expr": "items.map(p => p.budget).reduce((a, b) => a + b, 0)" },
+  "totalBudgetFormatted": { "@expr": "$currency(totalBudget)" },
+  "activeCount": { "@expr": "items.filter(p => p.status == 'active').length" },
+  "completedCount": { "@expr": "items.filter(p => p.status == 'completed').length" }
+}

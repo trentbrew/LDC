@@ -1,0 +1,77 @@
+{
+  "@context": { "lit": "https://literals.test/" },
+  "@id": "lit:test",
+
+  "@relations": {
+    "projects": "./projects.data",
+    "team": "./team.data"
+  },
+
+  "a": 1,
+  "b": 2,
+  "c": 3,
+  "name": "Alice",
+
+  "test_array_literal": { "@expr": "[1, 2, 3]" },
+  "test_array_with_vars": { "@expr": "[a, b, c]" },
+  "test_array_mixed": { "@expr": "[a, 'hello', true, 42]" },
+  "test_array_nested": { "@expr": "[[1, 2], [3, 4]]" },
+  "test_array_empty": { "@expr": "[]" },
+
+  "test_object_literal": { "@expr": "{ x: 1, y: 2 }" },
+  "test_object_with_vars": { "@expr": "{ first: a, second: b, third: c }" },
+  "test_object_computed": { "@expr": "{ sum: a + b + c, product: a * b * c }" },
+  "test_object_nested": { "@expr": "{ outer: { inner: 42 } }" },
+  "test_object_empty": { "@expr": "{}" },
+
+  "test_array_index": { "@expr": "[10, 20, 30][1]" },
+  "test_object_access": { "@expr": "{ name: 'Bob', age: 30 }.name" },
+
+  "test_rollup_compound_and": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'active' && budget > 5000",
+      "select": "name",
+      "aggregate": "concat"
+    }
+  },
+
+  "test_rollup_compound_or": {
+    "@rollup": {
+      "relation": "team",
+      "property": "members",
+      "filter": "role == 'developer' || role == 'designer'",
+      "select": "name",
+      "aggregate": "concat"
+    }
+  },
+
+  "test_rollup_keyword_and": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'active' and budget >= 5000",
+      "aggregate": "count"
+    }
+  },
+
+  "test_rollup_keyword_or": {
+    "@rollup": {
+      "relation": "team",
+      "property": "members",
+      "filter": "role == 'developer' or role == 'pm'",
+      "aggregate": "count"
+    }
+  },
+
+  "test_complex_filter": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "budget > 3000 && status != 'paused'",
+      "select": "budget",
+      "aggregate": "sum"
+    }
+  }
+}

@@ -43,11 +43,43 @@
     }
   },
 
+  "devOrDesignerCount": {
+    "@rollup": {
+      "relation": "team",
+      "property": "members",
+      "filter": "role == 'developer' || role == 'designer'",
+      "aggregate": "count"
+    }
+  },
+
+  "highBudgetActive": {
+    "@rollup": {
+      "relation": "projects",
+      "property": "items",
+      "filter": "status == 'active' && budget >= 5000",
+      "select": "name",
+      "aggregate": "concat"
+    }
+  },
+
   "estimatedLaborCost": { "@expr": "totalHours * avgRate" },
   "profitMargin": { "@expr": "totalBudget - estimatedLaborCost" },
   "activeMargin": { "@expr": "activeBudget - estimatedLaborCost" },
 
+  "totalBudgetFormatted": { "@expr": "$currency(totalBudget)" },
+  "laborCostFormatted": { "@expr": "$currency(estimatedLaborCost)" },
+  "profitMarginFormatted": { "@expr": "$currency(profitMargin)" },
+  "avgRateFormatted": { "@expr": "$currency(avgRate) + '/hr'" },
+
+  "metrics": {
+    "@expr": "{ projects: projectCount, active: activeProjects, budget: $currency(totalBudget), team: teamSize }"
+  },
+
   "summary": {
-    "@expr": "projectCount + ' projects (' + activeProjects + ' active), $' + totalBudget + ' budget, ' + teamSize + ' team members'"
+    "@expr": "projectCount + ' projects (' + activeProjects + ' active), ' + $currency(totalBudget) + ' budget, ' + teamSize + ' team members'"
+  },
+
+  "healthStatus": {
+    "@expr": "profitMargin > 0 ? 'profitable' : 'at-risk'"
   }
 }

@@ -1,0 +1,55 @@
+{
+  "@context": { "tm": "https://taskmgmt.local/" },
+  "@id": "tm:milestones",
+  "@type": "MilestoneCollection",
+
+  "items": [
+    {
+      "id": "ms-1",
+      "name": "Design Complete",
+      "project": "proj-1",
+      "dueDate": "2024-02-15",
+      "status": "completed"
+    },
+    {
+      "id": "ms-2",
+      "name": "Beta Launch",
+      "project": "proj-1",
+      "dueDate": "2024-03-30",
+      "status": "in-progress"
+    },
+    {
+      "id": "ms-3",
+      "name": "Final Release",
+      "project": "proj-1",
+      "dueDate": "2024-04-30",
+      "status": "pending"
+    },
+    {
+      "id": "ms-4",
+      "name": "MVP Ready",
+      "project": "proj-2",
+      "dueDate": "2024-04-15",
+      "status": "in-progress"
+    },
+    {
+      "id": "ms-5",
+      "name": "App Store Submission",
+      "project": "proj-2",
+      "dueDate": "2024-06-15",
+      "status": "pending"
+    },
+    {
+      "id": "ms-6",
+      "name": "API Spec Finalized",
+      "project": "proj-3",
+      "dueDate": "2024-03-15",
+      "status": "pending"
+    }
+  ],
+
+  "totalCount": { "@expr": "items.length" },
+  "completedCount": { "@expr": "items.filter(m => m.status == 'completed').length" },
+  "inProgressCount": { "@expr": "items.filter(m => m.status == 'in-progress').length" },
+  "pendingCount": { "@expr": "items.filter(m => m.status == 'pending').length" }
+}

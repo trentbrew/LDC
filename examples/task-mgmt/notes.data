@@ -1,0 +1,51 @@
+{
+  "@context": { "tm": "https://taskmgmt.local/" },
+  "@id": "tm:notes",
+  "@type": "NoteCollection",
+
+  "items": [
+    {
+      "id": "note-1",
+      "title": "Homepage design decisions",
+      "content": "Decided to go with a minimalist approach. Hero section with animated gradient.",
+      "author": "p3",
+      "project": "proj-1",
+      "task": "task-1",
+      "createdAt": "2024-02-20T10:30:00Z",
+      "tags": ["design", "decision"]
+    },
+    {
+      "id": "note-2",
+      "title": "Auth flow requirements",
+      "content": "Need to support OAuth2, magic links, and traditional email/password.",
+      "author": "p1",
+      "project": "proj-2",
+      "task": "task-7",
+      "createdAt": "2024-03-05T14:15:00Z",
+      "tags": ["requirements", "auth"]
+    },
+    {
+      "id": "note-3",
+      "title": "Sprint 43 retro notes",
+      "content": "Team velocity improved. Need to focus on test coverage next sprint.",
+      "author": "p1",
+      "project": null,
+      "task": null,
+      "createdAt": "2024-03-08T16:00:00Z",
+      "tags": ["retro", "process"]
+    },
+    {
+      "id": "note-4",
+      "title": "API integration blockers",
+      "content": "Waiting on third-party API credentials. ETA: end of week.",
+      "author": "p4",
+      "project": "proj-3",
+      "task": null,
+      "createdAt": "2024-03-10T09:00:00Z",
+      "tags": ["blocker", "api"]
+    }
+  ],
+
+  "totalCount": { "@expr": "items.length" },
+  "recentNotes": { "@expr": "items.slice(-3)" }
+}
